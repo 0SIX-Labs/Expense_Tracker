@@ -1,0 +1,1 @@
+ /Users/agent0six/Documents/GitHub/Expense\ Tracker/expense_tracker/build/4e20a8304aa1ce06a4f77269407cbe79/dart_build_result.json:  /Users/agent0six/Documents/GitHub/Expense\ Tracker/expense_tracker/.dart_tool/package_config.json /Users/agent0six/Documents/GitHub/Expense\ Tracker/expense_tracker/pubspec.yaml /opt/homebrew/share/flutter/bin/cache/dart-sdk/version
