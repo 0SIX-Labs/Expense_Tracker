@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
-import '../models/income.dart';
 import '../models/category.dart';
 import '../services/services.dart';
 import '../widgets/glass_card.dart';
@@ -124,6 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBody: true,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -470,40 +471,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBottomNavBar() {
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white.withOpacity(0.3),
-            Colors.white.withOpacity(0.2),
-            Colors.white.withOpacity(0.1),
+            const Color(0xFF667eea).withOpacity(0.85),
+            const Color(0xFF764ba2).withOpacity(0.85),
+            const Color(0xFFf093fb).withOpacity(0.75),
           ],
           stops: const [0.0, 0.5, 1.0],
         ),
         border: Border.all(color: Colors.white.withOpacity(0.4), width: 2),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.3),
-            blurRadius: 40,
+            color: const Color(0xFF667eea).withOpacity(0.5),
+            blurRadius: 35,
             offset: const Offset(0, 20),
-            spreadRadius: -5,
           ),
           BoxShadow(
-            color: const Color(0xFFf093fb).withOpacity(0.2),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
+            color: const Color(0xFFf093fb).withOpacity(0.3),
+            blurRadius: 25,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -538,23 +538,16 @@ class _HomeScreenState extends State<HomeScreen> {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
-          gradient: isSelected
-              ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white.withOpacity(0.4),
-                    Colors.white.withOpacity(0.2),
-                  ],
-                )
-              : null,
+          color: isSelected
+              ? const Color(0xFF667eea).withOpacity(0.4)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: Colors.white.withOpacity(0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
+                    color: const Color(0xFF667eea).withOpacity(0.5),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ]
               : null,
@@ -576,7 +569,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon,
                 color: isSelected
                     ? Colors.white
-                    : Colors.white.withOpacity(0.7),
+                    : Colors.white.withOpacity(0.9),
                 size: isSelected ? 22 : 20,
               ),
             ),
@@ -586,7 +579,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 color: isSelected
                     ? Colors.white
-                    : Colors.white.withOpacity(0.7),
+                    : Colors.white.withOpacity(0.9),
                 fontSize: isSelected ? 12 : 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: isSelected ? 0.5 : 0.3,

@@ -88,8 +88,9 @@ class AppLogger {
 
     // Skip if logging is disabled in production
     if (!EnvironmentManager.config.enableLogging &&
-        EnvironmentManager.isProduction)
+        EnvironmentManager.isProduction) {
       return;
+    }
 
     final prefix = tag != null ? '[$tag] ' : '';
     final levelStr = level.name.toUpperCase();
