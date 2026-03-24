@@ -74,6 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   late List<OnboardingPage> _pages;
   bool _pagesInitialized = false;
   String _lastCurrencyUsedForPages = '';
+  String _lastLocale = '';
 
   @override
   void initState() {
@@ -99,20 +100,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _initializePages() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     _pages = [
       // Page 0: Language Selection
       OnboardingPage(
-        title: 'Language',
-        description: 'Choose your preferred language',
+        title: l10n.language,
+        description: l10n.chooseLanguage,
         icon: Icons.language,
         gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
         content: _buildLanguageSelector(),
       ),
       // Page 1: Currency Selection
       OnboardingPage(
-        title: 'Currency',
-        description: 'Select your currency',
+        title: l10n.currency,
+        description: l10n.selectYourCurrency,
         icon: Icons.attach_money,
         gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
         content: _buildCurrencySelector(),
@@ -120,15 +121,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       // Page 2: Name Entry
       OnboardingPage(
         title: l10n.personalizeExperience,
-        description: 'Let\'s start by getting your name',
+        description: l10n.personalizeExperienceDescription,
         icon: Icons.person,
         gradientColors: [Color(0xFFf093fb), Color(0xFFf5576c)],
         content: _buildNameInput(),
       ),
       // Page 3: Welcome
       OnboardingPage(
-        title: 'Welcome to Fynz',
-        description: 'Your personal expense tracker that works 100% offline',
+        title: l10n.welcomeToFynz,
+        description: l10n.welcomeToFynzDescription,
         icon: Icons.account_balance_wallet,
         gradientColors: [Color(0xFF667eea), Color(0xFF764ba2)],
         content: _buildNativeAppInfo(),
@@ -171,9 +172,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _nextPage() {
+    final l10n = AppLocalizations.of(context);
     // Validate name on page 2 (after language and currency)
     if (_currentPage == 2 && _nameController.text.trim().isEmpty) {
-      _showError('Please enter your name to continue');
+      _showError(l10n.pleaseEnterYourNameToContinue);
       return;
     }
 
@@ -303,10 +305,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_pagesInitialized || _lastCurrencyUsedForPages != _selectedCurrency) {
+    final l10n = AppLocalizations.of(context);
+    // Check if locale has changed and reinitialize pages to get new localized text
+    final currentLocale = Localizations.localeOf(context).languageCode;
+    if (!_pagesInitialized ||
+        _lastCurrencyUsedForPages != _selectedCurrency ||
+        _lastLocale != currentLocale) {
       _initializePages();
       _pagesInitialized = true;
       _lastCurrencyUsedForPages = _selectedCurrency;
+      _lastLocale = currentLocale;
     }
 
     return Scaffold(
@@ -353,8 +361,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: GradientButton(
                   text: _currentPage == _pages.length - 1
-                      ? 'Get Started'
-                      : 'Next',
+                      ? l10n.getStarted
+                      : l10n.next,
                   onPressed: _isLoading ? () {} : _nextPage,
                   isLoading: _isLoading,
                   gradientColors: _pages[_currentPage].gradientColors,
@@ -371,8 +379,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPage(OnboardingPage page) {
-    final isLanguageCurrencyPage = _currentPage == 0;
-    final isFormPage = _currentPage >= 1 && _currentPage <= 3;
+    // Both language (index 0) and currency (index 1) pages need Column layout for Expanded to work
+    final isLanguageCurrencyPage = _currentPage == 0 || _currentPage == 1;
+    final isFormPage = _currentPage >= 2 && _currentPage <= 3;
     final iconSize = isFormPage ? 60.0 : 120.0;
     final iconIconSize = isFormPage ? 32.0 : 60.0;
     final borderRadius = isFormPage ? 15.0 : 30.0;
@@ -387,7 +396,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            const SizedBox(height: 16),
+            const SizedBox(height: 40),
             Container(
               width: 50,
               height: 50,
@@ -402,9 +411,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ],
               ),
-              child: const Icon(Icons.language, color: Colors.white, size: 26),
+              child: Icon(page.icon, color: Colors.white, size: 26),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 4),
             Text(
               page.title,
               textAlign: TextAlign.center,
@@ -414,7 +423,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             Text(
               page.description,
               textAlign: TextAlign.center,
@@ -424,8 +433,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: 24),
-            if (page.content != null) Expanded(child: page.content!),
+            const SizedBox(height: 4),
+            if (page.content != null)
+              Expanded(
+                child: Transform.translate(
+                  offset: const Offset(-20, -40),
+                  child: page.content!,
+                ),
+              ),
           ],
         ),
       );
@@ -485,184 +500,84 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildLanguageSelector() {
     final selectedIndex = _languages.indexOf(_selectedLanguage);
 
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF667eea).withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Picker header
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Language',
-                  style: TextStyle(
+    return Column(
+      children: [
+        Expanded(
+          child: CupertinoPicker(
+            itemExtent: 100,
+            scrollController: FixedExtentScrollController(
+              initialItem: selectedIndex,
+            ),
+            onSelectedItemChanged: (index) {
+              final newLang = _languages[index];
+              setState(() {
+                _selectedLanguage = newLang;
+              });
+              // Update locale and rebuild widget to reflect language change
+              final localeProvider = Provider.of<LocaleProvider>(
+                context,
+                listen: false,
+              );
+              localeProvider.setLocale(newLang);
+            },
+            children: _languages.map((lang) {
+              return Center(
+                child: Text(
+                  _languageNames[lang] ?? lang,
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 40,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  _languageNames[_selectedLanguage] ?? _selectedLanguage,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
+              );
+            }).toList(),
           ),
-
-          // Picker separator
-          Container(
-            height: 1,
-            color: Colors.white.withValues(alpha: 0.3),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-
-          // Cupertino picker
-          Expanded(
-            child: CupertinoPicker(
-              itemExtent: 40,
-              scrollController: FixedExtentScrollController(
-                initialItem: selectedIndex,
-              ),
-              onSelectedItemChanged: (index) {
-                final newLang = _languages[index];
-                setState(() {
-                  _selectedLanguage = newLang;
-                });
-                // Update locale immediately without page rebuild
-                final localeProvider = Provider.of<LocaleProvider>(
-                  context,
-                  listen: false,
-                );
-                localeProvider.setLocale(newLang);
-              },
-              children: _languages.map((lang) {
-                return Center(
-                  child: Text(
-                    _languageNames[lang] ?? lang,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildCurrencySelector() {
     final selectedIndex = _currencies.indexOf(_selectedCurrency);
 
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF667eea).withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Picker header
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Currency',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _selectedCurrency != _deviceSuggestedCurrency
-                      ? '$_selectedCurrency (Device: $_deviceSuggestedCurrency)'
-                      : _selectedCurrency,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+    return Column(
+      children: [
+        Expanded(
+          child: CupertinoPicker(
+            itemExtent: 100,
+            scrollController: FixedExtentScrollController(
+              initialItem: selectedIndex,
             ),
-          ),
-
-          // Picker separator
-          Container(
-            height: 1,
-            color: Colors.white.withValues(alpha: 0.3),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-          ),
-
-          // Cupertino picker
-          Expanded(
-            child: CupertinoPicker(
-              itemExtent: 40,
-              scrollController: FixedExtentScrollController(
-                initialItem: selectedIndex,
-              ),
-              onSelectedItemChanged: (index) {
-                setState(() {
-                  _selectedCurrency = _currencies[index];
-                });
-              },
-              children: _currencies.map((currency) {
-                return Center(
+            onSelectedItemChanged: (index) {
+              setState(() {
+                _selectedCurrency = _currencies[index];
+              });
+            },
+            children: _currencies.map((currency) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 25),
                   child: Text(
-                    currency,
+                    '${_getCurrencySymbol(currency)}  $currency',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 40,
+                      fontWeight: FontWeight.w700,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildNameInput() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return GlassCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -693,13 +608,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildMonthStartSelector() {
+    final l10n = AppLocalizations.of(context);
     return GlassCard(
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          const Text(
-            'Billing Cycle Start',
-            style: TextStyle(
+          Text(
+            l10n.billingCycleStart,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -707,7 +623,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Your expense tracking cycle resets on this day each month',
+            l10n.billingCycleDescription,
             style: TextStyle(
               fontSize: 14,
               color: Colors.white.withValues(alpha: 0.8),
@@ -736,7 +652,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Day',
+                  l10n.day,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.white.withValues(alpha: 0.9),
@@ -794,6 +710,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildIncomeInput() {
+    final l10n = AppLocalizations.of(context);
     final currencySymbol = _getCurrencySymbol(_selectedCurrency);
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -803,9 +720,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Monthly Income Sources',
-                style: TextStyle(
+              Text(
+                l10n.monthlyIncomeSources,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -832,13 +749,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          _buildIncomeField('Salary', _salaryController),
+          _buildIncomeField(l10n.salary, _salaryController),
           const SizedBox(height: 12),
-          _buildIncomeField('Freelance', _freelanceController),
+          _buildIncomeField(l10n.freelance, _freelanceController),
           const SizedBox(height: 12),
-          _buildIncomeField('Investment', _investmentController),
+          _buildIncomeField(l10n.investment, _investmentController),
           const SizedBox(height: 12),
-          _buildIncomeField('Other', _otherIncomeController),
+          _buildIncomeField(l10n.other, _otherIncomeController),
         ],
       ),
     );
@@ -906,6 +823,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildNativeAppInfo() {
+    final l10n = AppLocalizations.of(context);
     return GlassCard(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -932,7 +850,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Icon(Icons.phone_iphone, color: Colors.white, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  'Native Mobile App',
+                  l10n.nativeMobileApp,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
@@ -948,32 +866,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Privacy Features
           _buildFeatureRow(
             icon: Icons.lock_outline,
-            title: '100% Private',
-            description: 'All data stays on your device',
+            title: l10n.fullyPrivate,
+            description: l10n.allDataStaysOnDevice,
           ),
 
           const SizedBox(height: 16),
 
           _buildFeatureRow(
             icon: Icons.cloud_off,
-            title: 'No Backend',
-            description: 'No server, no account needed',
+            title: l10n.noBackend,
+            description: l10n.noServerNoAccount,
           ),
 
           const SizedBox(height: 16),
 
           _buildFeatureRow(
             icon: Icons.security,
-            title: 'Fully Offline',
-            description: 'Works without internet',
+            title: l10n.fullyOffline,
+            description: l10n.worksWithoutInternet,
           ),
 
           const SizedBox(height: 16),
 
           _buildFeatureRow(
             icon: Icons.speed,
-            title: 'Lightning Fast',
-            description: 'Instant access, no loading',
+            title: l10n.lightningFast,
+            description: l10n.instantAccessNoLoading,
           ),
         ],
       ),

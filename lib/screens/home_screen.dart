@@ -8,6 +8,7 @@ import '../widgets/glass_card.dart';
 import '../widgets/expense_card.dart';
 import '../core/core.dart';
 import '../utils/currency_utils.dart';
+import '../utils/date_utils.dart';
 import '../generated/app_localizations.dart';
 import 'add_expense_screen.dart';
 import 'analytics_screen.dart';
@@ -34,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double _totalIncome = 0;
   double _totalSpent = 0;
   bool _isLoading = true;
+  int _monthStartDay = 1; // Add this to track billing cycle start day
   late AppLocalizations l10n;
 
   @override
@@ -50,8 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       // Load user profile
       final profileResult = await _userProfileService.get();
-      if (profileResult.isSuccess && profileResult.data != null) {
+      if (profileResult.isSuccess) {
         _userName = profileResult.data!.name;
+        _monthStartDay = profileResult.data!.monthStartDay;
       }
 
       // Load expenses
@@ -60,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _expenses = expenseResult.data!;
       }
 
-      // Load income for current month
+      // Load income for current billing cycle
       final now = DateTime.now();
       final incomeResult = await _incomeService.getByMonthYear(
         now.month,
@@ -73,10 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
 
-      // Calculate total spent this month
-      final startOfMonth = DateTime(now.year, now.month, 1);
+      // Calculate total spent this billing cycle using custom monthStartDay
+      final cycleStart = BillingDateUtils.getCurrentCycleStart(_monthStartDay);
       _totalSpent = _expenses
-          .where((e) => e.date.isAfter(startOfMonth))
+          .where(
+            (e) => e.date.isAfter(cycleStart.subtract(const Duration(days: 1))),
+          )
           .fold(0.0, (sum, e) => sum + e.amount);
     } catch (e, stackTrace) {
       AppLogger.error(
@@ -92,10 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   double get _totalThisMonth {
-    final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
+    final cycleStart = BillingDateUtils.getCurrentCycleStart(_monthStartDay);
     return _expenses
-        .where((e) => e.date.isAfter(startOfMonth))
+        .where(
+          (e) => e.date.isAfter(cycleStart.subtract(const Duration(days: 1))),
+        )
         .fold(0.0, (sum, e) => sum + e.amount);
   }
 
@@ -109,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    l10n = AppLocalizations.of(context)!;
+    final appLocal = AppLocalizations.of(context);
+    l10n = appLocal;
 
     if (_isLoading) {
       return Scaffold(
@@ -146,6 +153,11 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 _currentIndex = index;
               });
+              // Reload data when navigating back to home tab to reflect any changes
+              // (like month start day changes made in settings)
+              if (index == 0) {
+                _loadData();
+              }
             },
             children: [
               _buildHomeTab(),
@@ -344,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           return const Text('Loading...');
                         } else if (snapshot.hasError) {
                           return const Text('Error loading currency');
-                        } else if (snapshot.hasData) {
+                        } else if (snapshot.hasData && snapshot.data != null) {
                           final currencyFormat = snapshot.data!;
                           return Text(
                             currencyFormat.format(_totalIncome),
@@ -387,7 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           return const Text('Loading...');
                         } else if (snapshot.hasError) {
                           return const Text('Error loading currency');
-                        } else if (snapshot.hasData) {
+                        } else if (snapshot.hasData && snapshot.data != null) {
                           final currencyFormat = snapshot.data!;
                           return Text(
                             currencyFormat.format(_totalSpent),
@@ -431,7 +443,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return const Text('Loading...');
                     } else if (snapshot.hasError) {
                       return const Text('Error loading currency');
-                    } else if (snapshot.hasData) {
+                    } else if (snapshot.hasData && snapshot.data != null) {
                       final currencyFormat = snapshot.data!;
                       return Text(
                         currencyFormat.format(remaining),
@@ -490,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const Text('Loading...');
               } else if (snapshot.hasError) {
                 return const Text('Error loading currency');
-              } else if (snapshot.hasData) {
+              } else if (snapshot.hasData && snapshot.data != null) {
                 final currencyFormat = snapshot.data!;
                 return Text(
                   currencyFormat.format(amount),
@@ -511,7 +523,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavBar() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
@@ -724,7 +736,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   return const Text('Loading...');
                                 } else if (snapshot.hasError) {
                                   return const Text('Error loading currency');
-                                } else if (snapshot.hasData) {
+                                } else if (snapshot.hasData &&
+                                    snapshot.data != null) {
                                   final currencyFormat = snapshot.data!;
                                   return Text(
                                     currencyFormat.format(entry.value),

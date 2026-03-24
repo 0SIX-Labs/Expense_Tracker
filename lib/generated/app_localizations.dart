@@ -625,6 +625,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to delete expense'**
   String get failedToDeleteExpense;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @chooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred language'**
+  String get chooseLanguage;
+
+  /// No description provided for @selectYourCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your currency'**
+  String get selectYourCurrency;
+
+  /// No description provided for @billingCycleStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Billing Cycle Start'**
+  String get billingCycleStart;
+
+  /// No description provided for @billingCycleDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your expense tracking cycle resets on this day each month'**
+  String get billingCycleDescription;
+
+  /// No description provided for @day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get day;
+
+  /// No description provided for @nativeMobileApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Native Mobile App'**
+  String get nativeMobileApp;
+
+  /// No description provided for @fullyPrivate.
+  ///
+  /// In en, this message translates to:
+  /// **'100% Private'**
+  String get fullyPrivate;
+
+  /// No description provided for @allDataStaysOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'All data stays on your device'**
+  String get allDataStaysOnDevice;
+
+  /// No description provided for @noBackend.
+  ///
+  /// In en, this message translates to:
+  /// **'No Backend'**
+  String get noBackend;
+
+  /// No description provided for @noServerNoAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No server, no account needed'**
+  String get noServerNoAccount;
+
+  /// No description provided for @fullyOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Fully Offline'**
+  String get fullyOffline;
+
+  /// No description provided for @worksWithoutInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'Works without internet'**
+  String get worksWithoutInternet;
+
+  /// No description provided for @lightningFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Lightning Fast'**
+  String get lightningFast;
+
+  /// No description provided for @instantAccessNoLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant access, no loading'**
+  String get instantAccessNoLoading;
+
+  /// No description provided for @pleaseEnterYourNameToContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name to continue'**
+  String get pleaseEnterYourNameToContinue;
+
+  /// No description provided for @welcomeToFynzDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your personal expense tracker that works 100% offline'**
+  String get welcomeToFynzDescription;
+
+  /// No description provided for @personalizeExperienceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s start by getting your name'**
+  String get personalizeExperienceDescription;
 }
 
 class _AppLocalizationsDelegate

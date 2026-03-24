@@ -278,4 +278,62 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get failedToDeleteExpense => 'Échec de la suppression de la dépense';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get chooseLanguage => 'Choose your preferred language';
+
+  @override
+  String get selectYourCurrency => 'Select your currency';
+
+  @override
+  String get billingCycleStart => 'Billing Cycle Start';
+
+  @override
+  String get billingCycleDescription =>
+      'Your expense tracking cycle resets on this day each month';
+
+  @override
+  String get day => 'Day';
+
+  @override
+  String get nativeMobileApp => 'Native Mobile App';
+
+  @override
+  String get fullyPrivate => '100% Private';
+
+  @override
+  String get allDataStaysOnDevice => 'All data stays on your device';
+
+  @override
+  String get noBackend => 'No Backend';
+
+  @override
+  String get noServerNoAccount => 'No server, no account needed';
+
+  @override
+  String get fullyOffline => 'Fully Offline';
+
+  @override
+  String get worksWithoutInternet => 'Works without internet';
+
+  @override
+  String get lightningFast => 'Lightning Fast';
+
+  @override
+  String get instantAccessNoLoading => 'Instant access, no loading';
+
+  @override
+  String get pleaseEnterYourNameToContinue =>
+      'Please enter your name to continue';
+
+  @override
+  String get welcomeToFynzDescription =>
+      'Your personal expense tracker that works 100% offline';
+
+  @override
+  String get personalizeExperienceDescription =>
+      'Let\'s start by getting your name';
 }
