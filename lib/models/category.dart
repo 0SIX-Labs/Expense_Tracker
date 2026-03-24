@@ -101,7 +101,7 @@ class Category {
       'id': id,
       'name': name,
       'icon': icon.codePoint,
-      'color': color.value,
+      'color': color.toARGB32(),
     };
   }
 
@@ -111,7 +111,10 @@ class Category {
       name: json['name'],
       icon: IconData(json['icon'], fontFamily: 'MaterialIcons'),
       color: Color(json['color']),
-      gradient: [Color(json['color']), Color(json['color']).withOpacity(0.7)],
+      gradient: [
+        Color(json['color']),
+        Color(json['color']).withValues(alpha: 0.7),
+      ],
     );
   }
 

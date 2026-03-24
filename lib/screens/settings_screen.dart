@@ -85,13 +85,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             'Customize your experience',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 24),
 
           // Profile Section
           _buildProfileSection(),
+          const SizedBox(height: 16),
+
+          // Theme Selector
+          _buildThemeSelector(),
           const SizedBox(height: 16),
 
           // Category Management
@@ -106,20 +110,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildMonthStartDaySelector(),
           const SizedBox(height: 16),
 
-          // Dark Mode Toggle
-          _buildDarkModeToggle(),
-          const SizedBox(height: 16),
-
           // Notifications Toggle
           _buildNotificationsToggle(),
           const SizedBox(height: 24),
 
           // Export Data
           _buildExportSection(),
-          const SizedBox(height: 16),
-
-          // About Section
-          _buildAboutSection(),
           const SizedBox(height: 100),
         ],
       ),
@@ -188,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       'Month starts on day $_monthStartDay',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -199,7 +195,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.edit, color: Colors.white, size: 18),
@@ -208,6 +204,136 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildThemeSelector() {
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return GlassCard(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.palette,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Theme',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Current: ${themeProvider.themeName}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  _buildThemeOption(
+                    context,
+                    AppTheme.glass,
+                    'Glass',
+                    Colors.transparent,
+                    const LinearGradient(
+                      colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                    ),
+                    themeProvider.currentTheme == AppTheme.glass,
+                  ),
+                  _buildThemeOption(
+                    context,
+                    AppTheme.material,
+                    'Material',
+                    const Color(0xFF667eea),
+                    null,
+                    themeProvider.currentTheme == AppTheme.material,
+                  ),
+                  _buildThemeOption(
+                    context,
+                    AppTheme.mint,
+                    'Mint',
+                    const Color(0xFF1DB584),
+                    null,
+                    themeProvider.currentTheme == AppTheme.mint,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeOption(
+    BuildContext context,
+    AppTheme theme,
+    String label,
+    Color? solidColor,
+    Gradient? gradient,
+    bool isSelected,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        context.read<ThemeProvider>().setTheme(theme);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: gradient,
+          color: solidColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected
+                ? Colors.white
+                : Colors.white.withValues(alpha: 0.3),
+            width: isSelected ? 2 : 1,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: (solidColor ?? Colors.white).withValues(alpha: 0.5),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            fontSize: 14,
+          ),
+        ),
       ),
     );
   }
@@ -250,7 +376,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             'Create and manage custom expense and income categories',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 16),
@@ -333,12 +459,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             colors: [Color(0xFF667eea), Color(0xFF764ba2)],
                           )
                         : null,
-                    color: isSelected ? null : Colors.white.withOpacity(0.1),
+                    color: isSelected
+                        ? null
+                        : Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isSelected
                           ? Colors.transparent
-                          : Colors.white.withOpacity(0.2),
+                          : Colors.white.withValues(alpha: 0.2),
                     ),
                   ),
                   child: Text(
@@ -397,17 +525,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             'Your billing cycle starts on day $_monthStartDay of each month',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 16),
           Slider(
             value: _monthStartDay.toDouble(),
             min: 1,
-            max: 28,
-            divisions: 27,
+            max: 31,
+            divisions: 30,
             activeColor: Colors.white,
-            inactiveColor: Colors.white.withOpacity(0.3),
+            inactiveColor: Colors.white.withValues(alpha: 0.3),
             onChanged: (value) async {
               setState(() {
                 _monthStartDay = value.round();
@@ -425,14 +553,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text(
                 'Day 1',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),
               Text(
-                'Day 28',
+                'Day 31',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
               ),
@@ -440,65 +568,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDarkModeToggle() {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return GlassCard(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFf5576c), Color(0xFFf093fb)],
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Dark Mode',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'Enable dark theme',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Switch(
-                value: themeProvider.isDarkMode,
-                onChanged: (value) {
-                  themeProvider.toggleDarkMode(value);
-                },
-                activeThumbColor: Colors.white,
-                activeTrackColor: const Color(0xFF667eea).withOpacity(0.5),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 
@@ -538,7 +607,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   'Get budget alerts and reminders',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -552,7 +621,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               });
             },
             activeThumbColor: Colors.white,
-            activeTrackColor: const Color(0xFF4ECDC4).withOpacity(0.5),
+            activeTrackColor: const Color(0xFF4ECDC4).withValues(alpha: 0.5),
           ),
         ],
       ),
@@ -623,120 +692,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildAboutSection() {
-    return GlassCard(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF667eea), Color(0xFF764ba2)],
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.info, color: Colors.white, size: 20),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'About',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildAboutItem('Version', '1.0.0'),
-          _buildAboutItem('Developer', 'Expense Tracker Team'),
-          _buildAboutItem('License', 'MIT'),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _showPrivacyDialog();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      'Privacy Policy',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    _showTermsDialog();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      'Terms of Service',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAboutItem(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.7),
-            ),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showEditProfileDialog() {
     final nameController = TextEditingController(text: _userName);
     int selectedMonthStartDay = _monthStartDay;
@@ -758,10 +713,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Your Name',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                  labelStyle: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                     ),
                   ),
                   focusedBorder: const OutlineInputBorder(
@@ -778,10 +735,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Slider(
                 value: selectedMonthStartDay.toDouble(),
                 min: 1,
-                max: 28,
-                divisions: 27,
+                max: 31,
+                divisions: 30,
                 activeColor: Colors.white,
-                inactiveColor: Colors.white.withOpacity(0.3),
+                inactiveColor: Colors.white.withValues(alpha: 0.3),
                 onChanged: (value) {
                   setDialogState(() {
                     selectedMonthStartDay = value.round();
@@ -808,12 +765,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     defaultCurrency: _selectedCurrency,
                   );
 
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
                   if (result.isSuccess) {
+                    if (!mounted) return;
                     setState(() {
                       _userName = nameController.text.trim();
                       _monthStartDay = selectedMonthStartDay;
                     });
+                    if (!mounted) return;
                     Navigator.pop(context);
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Profile updated successfully'),
@@ -821,6 +788,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     );
                   } else {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -846,38 +814,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) => AlertDialog(
         title: Text('Export $format'),
         content: Text('$format export feature coming soon!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showPrivacyDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Privacy Policy'),
-        content: const Text('Privacy policy details will be available soon.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showTermsDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Terms of Service'),
-        content: const Text('Terms of service details will be available soon.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

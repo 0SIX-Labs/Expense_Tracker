@@ -30,7 +30,6 @@ class StorageService implements IStorageService {
     AppLogger.info('StorageService initialized', tag: 'StorageService');
   }
 
-  /// Get or open a Hive box
   Future<Box> _getBox(String boxName) async {
     final fullName = '$_prefix$boxName';
 

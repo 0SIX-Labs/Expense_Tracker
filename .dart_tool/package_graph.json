@@ -13,6 +13,7 @@
         "fl_chart",
         "flutter",
         "flutter_animate",
+        "flutter_localizations",
         "font_awesome_flutter",
         "glassmorphism",
         "hive",
@@ -205,7 +206,7 @@
     },
     {
       "name": "intl",
-      "version": "0.18.1",
+      "version": "0.20.2",
       "dependencies": [
         "clock",
         "meta",
@@ -251,6 +252,15 @@
       "name": "cupertino_icons",
       "version": "1.0.8",
       "dependencies": []
+    },
+    {
+      "name": "flutter_localizations",
+      "version": "0.0.0",
+      "dependencies": [
+        "flutter",
+        "intl",
+        "path"
+      ]
     },
     {
       "name": "flutter",

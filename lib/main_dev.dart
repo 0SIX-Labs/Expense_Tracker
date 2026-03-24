@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'config/config.dart';
@@ -8,6 +9,7 @@ import 'screens/home_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'services/services.dart';
 import 'core/core.dart';
+import 'generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,10 +26,6 @@ void main() async {
   // Initialize Storage Service
   final storageService = StorageService();
   await storageService.initialize();
-
-  // Register Hive TypeAdapters
-  // Note: TypeAdapters should be registered in models using @HiveType annotation
-  // and generated with build_runner
 
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([
@@ -62,6 +60,30 @@ class ExpenseTrackerApp extends StatelessWidget {
             themeMode: themeProvider.isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'),
+              Locale('es'),
+              Locale('de'),
+              Locale('fr'),
+              Locale('pt'),
+              Locale('ja'),
+              Locale('ko'),
+              Locale('ru'),
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale?.languageCode) {
+                  return supportedLocale;
+                }
+              }
+              return const Locale('en');
+            },
             home: const AppInitializer(),
           );
         },

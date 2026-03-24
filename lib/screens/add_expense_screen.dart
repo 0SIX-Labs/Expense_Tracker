@@ -117,7 +117,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
@@ -184,7 +184,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               hintStyle: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.white.withOpacity(0.3),
+                color: Colors.white.withValues(alpha: 0.3),
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.zero,
@@ -225,7 +225,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             style: const TextStyle(fontSize: 16, color: Colors.white),
             decoration: InputDecoration(
               hintText: 'e.g., Lunch at restaurant',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               border: InputBorder.none,
               contentPadding: EdgeInsets.zero,
             ),
@@ -271,12 +271,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     gradient: isSelected
                         ? LinearGradient(colors: category.gradient)
                         : null,
-                    color: isSelected ? null : Colors.white.withOpacity(0.1),
+                    color: isSelected
+                        ? null
+                        : Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isSelected
                           ? Colors.transparent
-                          : Colors.white.withOpacity(0.2),
+                          : Colors.white.withValues(alpha: 0.2),
                       width: 1,
                     ),
                   ),
@@ -374,7 +376,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             style: const TextStyle(fontSize: 16, color: Colors.white),
             decoration: InputDecoration(
               hintText: 'Add any additional notes...',
-              hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               border: InputBorder.none,
               contentPadding: EdgeInsets.zero,
             ),
@@ -447,6 +449,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _isLoading = false;
     });
 
-    Navigator.pop(context, expense);
+    if (mounted) {
+      Navigator.pop(context, expense);
+    }
   }
 }

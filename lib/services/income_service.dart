@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 import '../models/income.dart';
 import '../core/core.dart';
 
-/// Service for managing incomes with full CRUD operations
 class IncomeService {
   static final IncomeService _instance = IncomeService._internal();
   factory IncomeService() => _instance;
@@ -12,10 +11,8 @@ class IncomeService {
   static const String _boxName = AppConstants.boxIncomes;
   final _uuid = const Uuid();
 
-  /// Get the Hive box for incomes
   Future<Box<Income>> get _box async => Hive.openBox<Income>(_boxName);
 
-  /// Create a new income
   Future<Result<Income>> create({
     required double amount,
     required IncomeCategory category,
@@ -72,7 +69,6 @@ class IncomeService {
     }
   }
 
-  /// Get an income by ID
   Future<Result<Income?>> getById(String id) async {
     try {
       final box = await _box;
@@ -93,7 +89,6 @@ class IncomeService {
     }
   }
 
-  /// Get all incomes
   Future<Result<List<Income>>> getAll() async {
     try {
       final box = await _box;
@@ -115,7 +110,6 @@ class IncomeService {
     }
   }
 
-  /// Get incomes by month and year
   Future<Result<List<Income>>> getByMonthYear(int month, int year) async {
     try {
       final box = await _box;
@@ -139,7 +133,6 @@ class IncomeService {
     }
   }
 
-  /// Get total income for a month and year
   Future<Result<double>> getTotalByMonthYear(int month, int year) async {
     try {
       final result = await getByMonthYear(month, year);
@@ -167,7 +160,6 @@ class IncomeService {
     }
   }
 
-  /// Get income category totals for a month and year
   Future<Result<Map<IncomeCategory, double>>> getCategoryTotals(
     int month,
     int year,
@@ -203,7 +195,6 @@ class IncomeService {
     }
   }
 
-  /// Update an existing income
   Future<Result<Income>> update(Income income) async {
     try {
       final box = await _box;
@@ -234,7 +225,6 @@ class IncomeService {
     }
   }
 
-  /// Delete an income
   Future<Result<void>> delete(String id) async {
     try {
       final box = await _box;
@@ -257,7 +247,6 @@ class IncomeService {
     }
   }
 
-  /// Get recent incomes (limited)
   Future<Result<List<Income>>> getRecent({int limit = 10}) async {
     try {
       final box = await _box;
@@ -279,7 +268,6 @@ class IncomeService {
     }
   }
 
-  /// Clear all incomes
   Future<Result<void>> clearAll() async {
     try {
       final box = await _box;

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
 import 'glass_card.dart';
+import '../utils/currency_utils.dart';
 
 class ExpenseCard extends StatelessWidget {
   final Expense expense;
@@ -21,10 +22,6 @@ class ExpenseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final category = Category.getCategoryById(expense.category);
-    final currencyFormat = NumberFormat.currency(
-      symbol: '\$',
-      decimalDigits: 2,
-    );
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return GlassCard(
@@ -46,7 +43,7 @@ class ExpenseCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: category.color.withOpacity(0.3),
+                  color: category.color.withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),
@@ -83,7 +80,7 @@ class ExpenseCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: category.color.withOpacity(0.1),
+                        color: category.color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -128,29 +125,43 @@ class ExpenseCard extends StatelessWidget {
           const SizedBox(width: 12),
 
           // Amount
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                currencyFormat.format(expense.amount),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.titleLarge?.color,
-                ),
-              ),
-              if (onDelete != null)
-                IconButton(
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: Colors.red[400],
-                    size: 20,
-                  ),
-                  onPressed: onDelete,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
-            ],
+          FutureBuilder<NumberFormat>(
+            future: CurrencyUtils.getCurrencyFormatter(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              } else if (snapshot.hasError) {
+                return const Text('Error loading currency');
+              } else if (snapshot.hasData) {
+                final currencyFormat = snapshot.data!;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      currencyFormat.format(expense.amount),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
+                    if (onDelete != null)
+                      IconButton(
+                        icon: Icon(
+                          Icons.delete_outline,
+                          color: Colors.red[400],
+                          size: 20,
+                        ),
+                        onPressed: onDelete,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                  ],
+                );
+              } else {
+                return const Text('0.00');
+              }
+            },
           ),
         ],
       ),
@@ -167,10 +178,6 @@ class ExpenseCardCompact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final category = Category.getCategoryById(expense.category);
-    final currencyFormat = NumberFormat.currency(
-      symbol: '\$',
-      decimalDigits: 2,
-    );
 
     return GlassCard(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -209,13 +216,27 @@ class ExpenseCardCompact extends StatelessWidget {
           ),
 
           // Amount
-          Text(
-            currencyFormat.format(expense.amount),
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.titleMedium?.color,
-            ),
+          FutureBuilder<NumberFormat>(
+            future: CurrencyUtils.getCurrencyFormatter(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              } else if (snapshot.hasError) {
+                return const Text('Error loading currency');
+              } else if (snapshot.hasData) {
+                final currencyFormat = snapshot.data!;
+                return Text(
+                  currencyFormat.format(expense.amount),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).textTheme.titleMedium?.color,
+                  ),
+                );
+              } else {
+                return const Text('0.00');
+              }
+            },
           ),
         ],
       ),

@@ -15,6 +15,6 @@ void main() {
     await tester.pumpWidget(const ExpenseTrackerApp());
 
     // Verify that the app starts with the home screen
-    expect(find.text('Expense Tracker'), findsOneWidget);
+    expect(find.text('Fynz'), findsOneWidget);
   });
 }

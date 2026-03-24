@@ -116,7 +116,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             'Manage your spending limits',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 24),
@@ -171,7 +171,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.2),
+                    color: Colors.green.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -200,7 +200,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
             'Available for budgeting',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -240,8 +240,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: percentage > 80
-                      ? Colors.red.withOpacity(0.2)
-                      : Colors.green.withOpacity(0.2),
+                      ? Colors.red.withValues(alpha: 0.2)
+                      : Colors.green.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -269,7 +269,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: CircularProgressIndicator(
                     value: percentage / 100,
                     strokeWidth: 12,
-                    backgroundColor: Colors.white.withOpacity(0.1),
+                    backgroundColor: Colors.white.withValues(alpha: 0.1),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       percentage > 80 ? Colors.red[400]! : Colors.green[400]!,
                     ),
@@ -291,7 +291,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         'of ${currencyFormat.format(_totalBudget)}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -313,13 +313,13 @@ class _BudgetScreenState extends State<BudgetScreen> {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               _buildStatItem('Spent', currencyFormat.format(_totalSpent)),
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               _buildStatItem('Remaining', currencyFormat.format(remaining)),
             ],
@@ -343,7 +343,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7)),
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
         ),
       ],
     );
@@ -378,7 +381,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
               child: Text(
                 'No budgets yet. Add your first budget!',
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
               ),
@@ -435,7 +438,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       '${budget.period.name.capitalize()} • ${dateFormat.format(budget.startDate)} - ${dateFormat.format(budget.endDate)}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -477,7 +480,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     'Spent: ${currencyFormat.format(spent)}',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
                   Text(
@@ -496,7 +499,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
                   value: percentage / 100,
-                  backgroundColor: Colors.white.withOpacity(0.1),
+                  backgroundColor: Colors.white.withValues(alpha: 0.1),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     percentage > 80 ? Colors.red[400]! : category.color,
                   ),
@@ -516,7 +519,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text(
@@ -537,7 +540,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
+                      color: Colors.red.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -589,7 +592,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
               if (_incomes.isEmpty)
                 Text(
                   'No income recorded this month',
-                  style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
                 )
               else
                 ..._incomes.map(
@@ -670,12 +673,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   labelText: 'Amount',
-                  labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                  labelStyle: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
                   prefixText: '\$ ',
                   prefixStyle: const TextStyle(color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                     ),
                   ),
                   focusedBorder: const OutlineInputBorder(
@@ -702,9 +707,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     year: now.year,
                   );
 
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
                   if (result.isSuccess) {
+                    if (!mounted) return;
                     Navigator.pop(context);
                     _loadData();
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Income added successfully'),
@@ -712,6 +727,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       ),
                     );
                   } else {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -755,10 +771,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Budget Name (optional)',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -771,7 +789,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   value: selectedCategoryId,
                   hint: Text(
                     'Select Category',
-                    style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                   ),
                   dropdownColor: const Color(0xFF2D2D3A),
                   onChanged: (value) {
@@ -798,12 +818,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Amount',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     prefixText: '\$ ',
                     prefixStyle: const TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -855,9 +877,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         : null,
                   );
 
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
                   if (result.isSuccess) {
+                    if (!mounted) return;
                     Navigator.pop(context);
                     _loadData();
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Budget created successfully'),
@@ -865,6 +897,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       ),
                     );
                   } else {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -910,10 +943,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Budget Name (optional)',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -926,7 +961,9 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   value: selectedCategoryId,
                   hint: Text(
                     'Select Category',
-                    style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                   ),
                   dropdownColor: const Color(0xFF2D2D3A),
                   onChanged: (value) {
@@ -953,12 +990,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Amount',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     prefixText: '\$ ',
                     prefixStyle: const TextStyle(color: Colors.white),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -1010,9 +1049,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
                   final result = await _budgetService.update(updatedBudget);
 
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
                   if (result.isSuccess) {
+                    if (!mounted) return;
                     Navigator.pop(context);
                     _loadData();
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Budget updated successfully'),
@@ -1020,6 +1069,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                       ),
                     );
                   } else {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -1050,7 +1100,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         ),
         content: Text(
           'Are you sure you want to delete "${budget.name ?? Category.getCategoryById(budget.categoryId ?? 'other').name}"?',
-          style: TextStyle(color: Colors.white.withOpacity(0.8)),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
         ),
         actions: [
           TextButton(
@@ -1061,9 +1111,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
             onPressed: () async {
               final result = await _budgetService.delete(budget.id);
 
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
               if (result.isSuccess) {
+                if (!mounted) return;
                 Navigator.pop(context);
                 _loadData();
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Budget deleted successfully'),
@@ -1071,6 +1131,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   ),
                 );
               } else {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(

@@ -5,13 +5,11 @@ import '../models/budget.dart';
 import '../models/category.dart';
 import '../core/core.dart';
 
-/// Service for calculating analytics and insights
 class AnalyticsService {
   static final AnalyticsService _instance = AnalyticsService._internal();
   factory AnalyticsService() => _instance;
   AnalyticsService._internal();
 
-  /// Calculate spending by category for a date range
   Map<String, double> calculateCategorySpending(
     List<Expense> expenses,
     DateTime start,
@@ -30,7 +28,6 @@ class AnalyticsService {
     return spending;
   }
 
-  /// Calculate total spending for a date range
   double calculateTotalSpending(
     List<Expense> expenses,
     DateTime start,
@@ -41,7 +38,6 @@ class AnalyticsService {
         .fold(0.0, (sum, e) => sum + e.amount);
   }
 
-  /// Calculate daily average spending
   double calculateDailyAverage(
     List<Expense> expenses,
     DateTime start,
@@ -52,7 +48,6 @@ class AnalyticsService {
     return days > 0 ? total / days : 0;
   }
 
-  /// Get spending trend (comparing current period to previous)
   SpendingTrend getSpendingTrend(
     List<Expense> expenses,
     DateTime currentStart,
@@ -94,7 +89,6 @@ class AnalyticsService {
     );
   }
 
-  /// Get top spending categories
   List<CategorySpending> getTopCategories(
     List<Expense> expenses,
     DateTime start,
@@ -122,7 +116,6 @@ class AnalyticsService {
     return categories.take(limit).toList();
   }
 
-  /// Get monthly spending breakdown
   List<MonthlySpending> getMonthlySpending(List<Expense> expenses, int year) {
     final monthlyData = <int, double>{};
 
@@ -145,7 +138,6 @@ class AnalyticsService {
     });
   }
 
-  /// Calculate budget utilization
   BudgetUtilization calculateBudgetUtilization(Budget budget, double spent) {
     final remaining = budget.amount - spent;
     final percentage = budget.amount > 0 ? (spent / budget.amount) * 100 : 0.0;
@@ -170,7 +162,6 @@ class AnalyticsService {
     );
   }
 
-  /// Get top expenses for a period
   List<Expense> getTopExpenses(
     List<Expense> expenses,
     DateTime start,
@@ -185,7 +176,6 @@ class AnalyticsService {
     return filtered.take(limit).toList();
   }
 
-  /// Generate insights based on spending data
   List<SpendingInsight> generateInsights(
     List<Expense> expenses,
     DateTime start,

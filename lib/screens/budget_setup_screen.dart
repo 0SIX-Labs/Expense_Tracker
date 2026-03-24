@@ -74,10 +74,12 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
     await box.put('hasCompletedOnboarding', true);
 
     // Navigate to home screen
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
   }
 
   @override
@@ -113,7 +115,7 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                       'Define how much you want to spend in each category',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -165,12 +167,12 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                                     : null,
                                 color: isSelected
                                     ? null
-                                    : Colors.white.withOpacity(0.1),
+                                    : Colors.white.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: isSelected
                                       ? Colors.transparent
-                                      : Colors.white.withOpacity(0.2),
+                                      : Colors.white.withValues(alpha: 0.2),
                                 ),
                               ),
                               child: Text(
@@ -334,7 +336,7 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                         });
                       },
                       activeThumbColor: Colors.white,
-                      activeTrackColor: category.color.withOpacity(0.5),
+                      activeTrackColor: category.color.withValues(alpha: 0.5),
                     ),
                   ],
                 ),
@@ -358,7 +360,7 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                       ),
                       hintText: 'Enter budget amount',
                       hintStyle: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.zero,

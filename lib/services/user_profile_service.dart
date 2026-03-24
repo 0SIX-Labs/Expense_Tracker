@@ -2,7 +2,6 @@ import 'package:hive/hive.dart';
 import '../models/user_profile.dart';
 import '../core/core.dart';
 
-/// Service for managing user profile with full CRUD operations
 class UserProfileService {
   static final UserProfileService _instance = UserProfileService._internal();
   factory UserProfileService() => _instance;
@@ -11,11 +10,9 @@ class UserProfileService {
   static const String _boxName = AppConstants.boxUserProfile;
   static const String _profileKey = 'current_user_profile';
 
-  /// Get the Hive box for user profile
   Future<Box<UserProfile>> get _box async =>
       Hive.openBox<UserProfile>(_boxName);
 
-  /// Create or update user profile
   Future<Result<UserProfile>> createOrUpdate({
     required String name,
     int monthStartDay = 1,
@@ -62,7 +59,6 @@ class UserProfileService {
     }
   }
 
-  /// Get the current user profile
   Future<Result<UserProfile?>> get() async {
     try {
       final box = await _box;
@@ -83,7 +79,6 @@ class UserProfileService {
     }
   }
 
-  /// Check if user profile exists
   Future<Result<bool>> exists() async {
     try {
       final box = await _box;
@@ -104,7 +99,6 @@ class UserProfileService {
     }
   }
 
-  /// Update user name
   Future<Result<UserProfile>> updateName(String name) async {
     try {
       final box = await _box;
@@ -137,7 +131,6 @@ class UserProfileService {
     }
   }
 
-  /// Update month start day
   Future<Result<UserProfile>> updateMonthStartDay(int monthStartDay) async {
     try {
       if (monthStartDay < 1 || monthStartDay > 28) {
@@ -182,7 +175,6 @@ class UserProfileService {
     }
   }
 
-  /// Update default currency
   Future<Result<UserProfile>> updateDefaultCurrency(String currency) async {
     try {
       final box = await _box;
@@ -220,7 +212,6 @@ class UserProfileService {
     }
   }
 
-  /// Delete user profile
   Future<Result<void>> delete() async {
     try {
       final box = await _box;

@@ -7,6 +7,8 @@ import '../services/services.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/expense_card.dart';
 import '../core/core.dart';
+import '../utils/currency_utils.dart';
+import '../generated/app_localizations.dart';
 import 'add_expense_screen.dart';
 import 'analytics_screen.dart';
 import 'budget_screen.dart';
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double _totalIncome = 0;
   double _totalSpent = 0;
   bool _isLoading = true;
+  late AppLocalizations l10n;
 
   @override
   void initState() {
@@ -106,6 +109,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    l10n = AppLocalizations.of(context)!;
+
     if (_isLoading) {
       return Scaffold(
         body: Container(
@@ -162,34 +167,21 @@ class _HomeScreenState extends State<HomeScreen> {
       slivers: [
         // App Bar
         SliverAppBar(
-          expandedHeight: 120,
+          expandedHeight: 160,
           floating: true,
           pinned: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
           flexibleSpace: FlexibleSpaceBar(
-            titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
-            title: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hello, $_userName! 👋',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.9),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const Text(
-                  'Expense Tracker',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            titlePadding: const EdgeInsets.only(left: 24, bottom: 24),
+            title: Text(
+              'Hi, ${_userName.isNotEmpty ? _userName[0].toUpperCase() + _userName.substring(1).toLowerCase() : 'User'}',
+              style: const TextStyle(
+                fontSize: 36,
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+              ),
             ),
           ),
         ),
@@ -260,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     'See All',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -289,10 +281,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildIncomeSummaryCard() {
-    final currencyFormat = NumberFormat.currency(
-      symbol: '\$',
-      decimalDigits: 2,
-    );
     final remaining = _totalIncome - _totalSpent;
 
     return GlassCard(
@@ -318,8 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: remaining >= 0
-                      ? Colors.green.withOpacity(0.2)
-                      : Colors.red.withOpacity(0.2),
+                      ? Colors.green.withValues(alpha: 0.2)
+                      : Colors.red.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -344,17 +332,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Income',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      currencyFormat.format(_totalIncome),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
+                    FutureBuilder<NumberFormat>(
+                      future: CurrencyUtils.getCurrencyFormatter(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text('Loading...');
+                        } else if (snapshot.hasError) {
+                          return const Text('Error loading currency');
+                        } else if (snapshot.hasData) {
+                          final currencyFormat = snapshot.data!;
+                          return Text(
+                            currencyFormat.format(_totalIncome),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          );
+                        } else {
+                          return const Text('0.00');
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -362,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               Expanded(
                 child: Column(
@@ -372,17 +375,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Spent',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      currencyFormat.format(_totalSpent),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
+                    FutureBuilder<NumberFormat>(
+                      future: CurrencyUtils.getCurrencyFormatter(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text('Loading...');
+                        } else if (snapshot.hasError) {
+                          return const Text('Error loading currency');
+                        } else if (snapshot.hasData) {
+                          final currencyFormat = snapshot.data!;
+                          return Text(
+                            currencyFormat.format(_totalSpent),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          );
+                        } else {
+                          return const Text('0.00');
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -393,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -403,16 +421,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Remaining',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
-                Text(
-                  currencyFormat.format(remaining),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: remaining >= 0 ? Colors.green : Colors.red,
-                  ),
+                FutureBuilder<NumberFormat>(
+                  future: CurrencyUtils.getCurrencyFormatter(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text('Loading...');
+                    } else if (snapshot.hasError) {
+                      return const Text('Error loading currency');
+                    } else if (snapshot.hasData) {
+                      final currencyFormat = snapshot.data!;
+                      return Text(
+                        currencyFormat.format(remaining),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: remaining >= 0 ? Colors.green : Colors.red,
+                        ),
+                      );
+                    } else {
+                      return const Text('0.00');
+                    }
+                  },
                 ),
               ],
             ),
@@ -428,11 +460,6 @@ class _HomeScreenState extends State<HomeScreen> {
     IconData icon,
     List<Color> gradientColors,
   ) {
-    final currencyFormat = NumberFormat.currency(
-      symbol: '\$',
-      decimalDigits: 2,
-    );
-
     return GlassCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -451,18 +478,32 @@ class _HomeScreenState extends State<HomeScreen> {
             title,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            currencyFormat.format(amount),
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          FutureBuilder<NumberFormat>(
+            future: CurrencyUtils.getCurrencyFormatter(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              } else if (snapshot.hasError) {
+                return const Text('Error loading currency');
+              } else if (snapshot.hasData) {
+                final currencyFormat = snapshot.data!;
+                return Text(
+                  currencyFormat.format(amount),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                );
+              } else {
+                return const Text('0.00');
+              }
+            },
           ),
         ],
       ),
@@ -470,6 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       decoration: BoxDecoration(
@@ -478,21 +520,24 @@ class _HomeScreenState extends State<HomeScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF667eea).withOpacity(0.85),
-            const Color(0xFF764ba2).withOpacity(0.85),
-            const Color(0xFFf093fb).withOpacity(0.75),
+            const Color(0xFF667eea).withValues(alpha: 0.85),
+            const Color(0xFF764ba2).withValues(alpha: 0.85),
+            const Color(0xFFf093fb).withValues(alpha: 0.75),
           ],
           stops: const [0.0, 0.5, 1.0],
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.4),
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.5),
+            color: const Color(0xFF667eea).withValues(alpha: 0.5),
             blurRadius: 35,
             offset: const Offset(0, 20),
           ),
           BoxShadow(
-            color: const Color(0xFFf093fb).withOpacity(0.3),
+            color: const Color(0xFFf093fb).withValues(alpha: 0.3),
             blurRadius: 25,
             offset: const Offset(0, 8),
           ),
@@ -507,14 +552,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildNavItem(Icons.home_rounded, 'Home', 0),
-                _buildNavItem(Icons.bar_chart_rounded, 'Analytics', 1),
+                _buildNavItem(Icons.home_rounded, l10n.home, 0),
+                _buildNavItem(Icons.bar_chart_rounded, l10n.analytics, 1),
                 _buildNavItem(
                   Icons.account_balance_wallet_rounded,
-                  'Budget',
+                  l10n.budget,
                   2,
                 ),
-                _buildNavItem(Icons.settings_rounded, 'Settings', 3),
+                _buildNavItem(Icons.settings_rounded, l10n.settings, 3),
               ],
             ),
           ),
@@ -539,13 +584,13 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF667eea).withOpacity(0.4)
+              ? const Color(0xFF667eea).withValues(alpha: 0.4)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFF667eea).withOpacity(0.5),
+                    color: const Color(0xFF667eea).withValues(alpha: 0.5),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -561,7 +606,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xFF667eea).withOpacity(0.3)
+                    ? const Color(0xFF667eea).withValues(alpha: 0.3)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -569,7 +614,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon,
                 color: isSelected
                     ? Colors.white
-                    : Colors.white.withOpacity(0.9),
+                    : Colors.white.withValues(alpha: 0.9),
                 size: isSelected ? 22 : 20,
               ),
             ),
@@ -579,7 +624,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 color: isSelected
                     ? Colors.white
-                    : Colors.white.withOpacity(0.9),
+                    : Colors.white.withValues(alpha: 0.9),
                 fontSize: isSelected ? 12 : 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 letterSpacing: isSelected ? 0.5 : 0.3,
@@ -643,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: category.color.withOpacity(0.3),
+                              color: category.color.withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -671,12 +716,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              '\$${entry.value.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white.withOpacity(0.7),
-                              ),
+                            FutureBuilder<NumberFormat>(
+                              future: CurrencyUtils.getCurrencyFormatter(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text('Loading...');
+                                } else if (snapshot.hasError) {
+                                  return const Text('Error loading currency');
+                                } else if (snapshot.hasData) {
+                                  final currencyFormat = snapshot.data!;
+                                  return Text(
+                                    currencyFormat.format(entry.value),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white.withValues(
+                                        alpha: 0.7,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return const Text('0.00');
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -705,7 +767,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: percentage / 100,
-                                backgroundColor: Colors.white.withOpacity(0.1),
+                                backgroundColor: Colors.white.withValues(
+                                  alpha: 0.1,
+                                ),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   category.color,
                                 ),
@@ -735,7 +799,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.4),
+            color: const Color(0xFF667eea).withValues(alpha: 0.4),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -787,40 +851,76 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Expense'),
-        content: const Text('Are you sure you want to delete this expense?'),
+        backgroundColor: const Color(0xFF1a1a2e).withValues(alpha: 0.9),
+        title: Text(
+          'Delete Expense',
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to delete this expense?',
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.9)),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white.withValues(alpha: 0.8),
+              backgroundColor: Colors.white.withValues(alpha: 0.1),
+            ),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               final result = await _expenseService.delete(expense.id);
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
               if (result.isSuccess) {
+                if (!mounted) return;
                 setState(() {
                   _expenses.removeWhere((e) => e.id == expense.id);
                 });
                 _loadData(); // Refresh data
+                if (!mounted) return;
                 Navigator.pop(context);
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Expense deleted successfully'),
-                    backgroundColor: Colors.green,
+                  SnackBar(
+                    content: const Text('Expense deleted successfully'),
+                    backgroundColor: Colors.green[600],
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 );
               } else {
-                Navigator.pop(context);
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
                       result.errorMessage ?? 'Failed to delete expense',
                     ),
-                    backgroundColor: Colors.red,
+                    backgroundColor: Colors.red[600],
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 );
               }
             },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red[600],
+            ),
             child: const Text('Delete'),
           ),
         ],

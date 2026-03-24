@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 import '../models/expense.dart';
 import '../core/core.dart';
 
-/// Service for managing expenses with full CRUD operations
 class ExpenseService {
   static final ExpenseService _instance = ExpenseService._internal();
   factory ExpenseService() => _instance;
@@ -12,10 +11,8 @@ class ExpenseService {
   static const String _boxName = AppConstants.boxExpenses;
   final _uuid = const Uuid();
 
-  /// Get the Hive box for expenses
   Future<Box<Expense>> get _box async => Hive.openBox<Expense>(_boxName);
 
-  /// Create a new expense
   Future<Result<Expense>> create({
     required double amount,
     required String category,
@@ -54,7 +51,6 @@ class ExpenseService {
     }
   }
 
-  /// Get an expense by ID
   Future<Result<Expense?>> getById(String id) async {
     try {
       final box = await _box;
@@ -75,7 +71,6 @@ class ExpenseService {
     }
   }
 
-  /// Get all expenses
   Future<Result<List<Expense>>> getAll() async {
     try {
       final box = await _box;
@@ -98,7 +93,6 @@ class ExpenseService {
     }
   }
 
-  /// Get expenses by date range
   Future<Result<List<Expense>>> getByDateRange(
     DateTime start,
     DateTime end,
@@ -125,7 +119,6 @@ class ExpenseService {
     }
   }
 
-  /// Get expenses by category
   Future<Result<List<Expense>>> getByCategory(String category) async {
     try {
       final box = await _box;
@@ -147,7 +140,6 @@ class ExpenseService {
     }
   }
 
-  /// Get recent expenses (limited)
   Future<Result<List<Expense>>> getRecent({int limit = 10}) async {
     try {
       final box = await _box;
@@ -169,7 +161,6 @@ class ExpenseService {
     }
   }
 
-  /// Update an existing expense
   Future<Result<Expense>> update(Expense expense) async {
     try {
       final box = await _box;
@@ -200,7 +191,6 @@ class ExpenseService {
     }
   }
 
-  /// Delete an expense
   Future<Result<void>> delete(String id) async {
     try {
       final box = await _box;
@@ -223,7 +213,6 @@ class ExpenseService {
     }
   }
 
-  /// Get total expenses for a date range
   Future<Result<double>> getTotal(DateTime start, DateTime end) async {
     try {
       final result = await getByDateRange(start, end);
@@ -251,7 +240,6 @@ class ExpenseService {
     }
   }
 
-  /// Get category totals for a date range
   Future<Result<Map<String, double>>> getCategoryTotals(
     DateTime start,
     DateTime end,
@@ -287,7 +275,6 @@ class ExpenseService {
     }
   }
 
-  /// Clear all expenses
   Future<Result<void>> clearAll() async {
     try {
       final box = await _box;

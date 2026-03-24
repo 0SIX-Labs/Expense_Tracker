@@ -29,12 +29,9 @@ class EnvironmentManager {
   /// Get the current environment
   static AppEnvironment get environment => _config.environment;
 
-  /// Check if running in development
   static bool get isDevelopment => _config.isDevelopment;
 
-  /// Check if running in UAT
   static bool get isUat => _config.isUat;
 
-  /// Check if running in production
   static bool get isProduction => _config.isProduction;
 }

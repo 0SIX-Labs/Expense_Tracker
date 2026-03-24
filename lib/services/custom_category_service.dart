@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../models/custom_category.dart';
 import '../core/core.dart';
 
-/// Service for managing custom categories with full CRUD operations
 class CustomCategoryService {
   static final CustomCategoryService _instance =
       CustomCategoryService._internal();
@@ -14,11 +13,9 @@ class CustomCategoryService {
   static const String _boxName = AppConstants.boxCustomCategories;
   final _uuid = const Uuid();
 
-  /// Get the Hive box for custom categories
   Future<Box<CustomCategory>> get _box async =>
       Hive.openBox<CustomCategory>(_boxName);
 
-  /// Create a new custom category
   Future<Result<CustomCategory>> create({
     required String name,
     required IconData icon,
@@ -52,7 +49,7 @@ class CustomCategoryService {
         id: _uuid.v4(),
         name: name.trim(),
         iconCodePoint: icon.codePoint,
-        colorValue: color.value,
+        colorValue: color.toARGB32(),
         isIncomeCategory: isIncomeCategory,
         createdAt: DateTime.now(),
       );
@@ -79,7 +76,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Get a custom category by ID
   Future<Result<CustomCategory?>> getById(String id) async {
     try {
       final box = await _box;
@@ -100,7 +96,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Get all custom categories
   Future<Result<List<CustomCategory>>> getAll() async {
     try {
       final box = await _box;
@@ -122,7 +117,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Get expense categories (non-income categories)
   Future<Result<List<CustomCategory>>> getExpenseCategories() async {
     try {
       final box = await _box;
@@ -144,7 +138,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Get income categories
   Future<Result<List<CustomCategory>>> getIncomeCategories() async {
     try {
       final box = await _box;
@@ -166,7 +159,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Update an existing custom category
   Future<Result<CustomCategory>> update(CustomCategory category) async {
     try {
       final box = await _box;
@@ -215,7 +207,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Delete a custom category
   Future<Result<void>> delete(String id) async {
     try {
       final box = await _box;
@@ -241,7 +232,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Check if a category name exists
   Future<Result<bool>> nameExists(
     String name, {
     bool isIncomeCategory = false,
@@ -271,7 +261,6 @@ class CustomCategoryService {
     }
   }
 
-  /// Get count of custom categories
   Future<Result<int>> getCount({bool? isIncomeCategory}) async {
     try {
       final box = await _box;

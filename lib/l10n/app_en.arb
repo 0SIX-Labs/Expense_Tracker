@@ -1,0 +1,110 @@
+{
+  "@@locale": "en",
+  "appTitle": "Fynz - Budget & Expense Tracker",
+  "welcomeToFynz": "Welcome to Fynz",
+  "hello": "Hello, {userName}!",
+  "@hello": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "settings": "Settings",
+  "home": "Home",
+  "analytics": "Analytics",
+  "budget": "Budget",
+  "addExpense": "Add Expense",
+  "monthlyOverview": "Monthly Overview",
+  "income": "Income",
+  "spent": "Spent",
+  "remaining": "Remaining",
+  "thisMonth": "This Month",
+  "thisWeek": "This Week",
+  "spendingByCategory": "Spending by Category",
+  "recentTransactions": "Recent Transactions",
+  "seeAll": "See All",
+  "onTrack": "On Track",
+  "overBudget": "Over Budget",
+  "categories": "Categories",
+  "currency": "Currency",
+  "monthStartDay": "Month Start Day",
+  "darkMode": "Dark Mode",
+  "notifications": "Notifications",
+  "exportData": "Export Data",
+  "exportCSV": "Export CSV",
+  "exportPDF": "Export PDF",
+  "about": "About",
+  "version": "Version",
+  "developer": "Developer",
+  "license": "License",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "save": "Save",
+  "edit": "Edit",
+  "editProfile": "Edit Profile",
+  "yourName": "Your Name",
+  "personalizeExperience": "Personalize Your Experience",
+  "selectCurrency": "Select Currency",
+  "currencyAutoDetected": "Currency auto-detected",
+  "whenMonthStart": "When does your month start?",
+  "monthStartDescription": "Choose the day your billing cycle begins to track expenses accurately",
+  "setMonthlyIncome": "Set your monthly income",
+  "monthlyIncomeDescription": "Enter your income sources to help plan your budget effectively",
+  "allSet": "All Set!",
+  "allSetDescription": "Your profile is ready. Let's start tracking your expenses",
+  "getStarted": "Get Started",
+  "next": "Next",
+  "skip": "Skip",
+  "salary": "Salary",
+  "freelance": "Freelance",
+  "investment": "Investment",
+  "other": "Other",
+  "otherIncome": "Other Income",
+  "foodAndDining": "Food & Dining",
+  "transport": "Transport",
+  "shopping": "Shopping",
+  "entertainment": "Entertainment",
+  "billsAndUtilities": "Bills & Utilities",
+  "healthcare": "Healthcare",
+  "education": "Education",
+  "travel": "Travel",
+  "groceries": "Groceries",
+  "deleteExpense": "Delete Expense",
+  "confirmDelete": "Are you sure you want to delete this expense?",
+  "expenseDeleted": "Expense deleted successfully",
+  "profileUpdated": "Profile updated successfully",
+  "manageCategories": "Manage Categories",
+  "categoriesDescription": "Create and manage custom expense and income categories",
+  "getBudgetAlerts": "Get budget alerts and reminders",
+  "enableDarkTheme": "Enable dark theme",
+  "customizeExperience": "Customize your experience",
+  "profile": "Profile",
+  "monthStartsOnDay": "Month starts on day {day}",
+  "@monthStartsOnDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "yourBillingCycle": "Your billing cycle will start on day {day} of each month",
+  "@yourBillingCycle": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyIncomeSources": "Monthly Income Sources",
+  "dayOne": "Day 1",
+  "dayTwentyEight": "Day 28",
+  "selected": "Selected",
+  "thisCurrencyWillBeUsed": "This currency will be used throughout the app for all transactions",
+  "pleaseEnterYourName": "Please enter your name",
+  "failedToSaveProfile": "Failed to save profile",
+  "anErrorOccurred": "An error occurred. Please try again",
+  "failedToDeleteExpense": "Failed to delete expense"
+}

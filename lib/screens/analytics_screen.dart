@@ -82,7 +82,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             'Track your spending patterns',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
             ),
           ),
           const SizedBox(height: 24),
@@ -186,7 +186,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               Container(
                 width: 1,
                 height: 40,
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
               ),
               _buildStatItem(
                 'Avg/Day',
@@ -213,7 +213,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.7)),
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
         ),
       ],
     );
@@ -303,7 +306,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         const SizedBox(height: 4),
                         LinearProgressIndicator(
                           value: percentage / 100,
-                          backgroundColor: Colors.white.withOpacity(0.1),
+                          backgroundColor: Colors.white.withValues(alpha: 0.1),
                           valueColor: AlwaysStoppedAnimation<Color>(
                             category.color,
                           ),
@@ -328,7 +331,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         '${percentage.toStringAsFixed(1)}%',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -378,7 +381,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Center(

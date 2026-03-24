@@ -3,7 +3,6 @@ import 'package:uuid/uuid.dart';
 import '../models/budget.dart';
 import '../core/core.dart';
 
-/// Service for managing budgets with full CRUD operations
 class BudgetService {
   static final BudgetService _instance = BudgetService._internal();
   factory BudgetService() => _instance;
@@ -12,10 +11,8 @@ class BudgetService {
   static const String _boxName = AppConstants.boxBudgets;
   final _uuid = const Uuid();
 
-  /// Get the Hive box for budgets
   Future<Box<Budget>> get _box async => Hive.openBox<Budget>(_boxName);
 
-  /// Create a new budget
   Future<Result<Budget>> create({
     required double amount,
     required BudgetPeriod period,
@@ -56,7 +53,6 @@ class BudgetService {
     }
   }
 
-  /// Get a budget by ID
   Future<Result<Budget?>> getById(String id) async {
     try {
       final box = await _box;
@@ -77,7 +73,6 @@ class BudgetService {
     }
   }
 
-  /// Get all budgets
   Future<Result<List<Budget>>> getAll() async {
     try {
       final box = await _box;
@@ -99,7 +94,6 @@ class BudgetService {
     }
   }
 
-  /// Get active budgets
   Future<Result<List<Budget>>> getActive() async {
     try {
       final box = await _box;
@@ -121,7 +115,6 @@ class BudgetService {
     }
   }
 
-  /// Get budget by category
   Future<Result<Budget?>> getByCategory(String categoryId) async {
     try {
       final box = await _box;
@@ -144,7 +137,6 @@ class BudgetService {
     }
   }
 
-  /// Update an existing budget
   Future<Result<Budget>> update(Budget budget) async {
     try {
       final box = await _box;
@@ -175,7 +167,6 @@ class BudgetService {
     }
   }
 
-  /// Delete a budget
   Future<Result<void>> delete(String id) async {
     try {
       final box = await _box;
@@ -198,7 +189,6 @@ class BudgetService {
     }
   }
 
-  /// Get total budget for active budgets
   Future<Result<double>> getTotalActive() async {
     try {
       final result = await getActive();
@@ -226,7 +216,6 @@ class BudgetService {
     }
   }
 
-  /// Seed default budgets for new users
   Future<Result<void>> seedDefaults() async {
     try {
       final box = await _box;
@@ -284,7 +273,6 @@ class BudgetService {
     }
   }
 
-  /// Clear all budgets
   Future<Result<void>> clearAll() async {
     try {
       final box = await _box;

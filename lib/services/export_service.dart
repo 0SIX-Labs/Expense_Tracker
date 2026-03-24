@@ -8,13 +8,11 @@ import '../models/expense.dart';
 import '../models/category.dart';
 import '../core/core.dart';
 
-/// Service for exporting data to CSV and PDF formats
 class ExportService {
   static final ExportService _instance = ExportService._internal();
   factory ExportService() => _instance;
   ExportService._internal();
 
-  /// Export expenses to CSV
   Future<Result<String>> exportToCsv(List<Expense> expenses) async {
     try {
       final dateFormat = DateFormat(AppConstants.exportDateFormat);
@@ -73,7 +71,6 @@ class ExportService {
     }
   }
 
-  /// Export expenses to PDF
   Future<Result<String>> exportToPdf(List<Expense> expenses) async {
     try {
       final pdf = pw.Document();
@@ -123,7 +120,7 @@ class ExportService {
 
             // Category Breakdown
             pw.Header(level: 1, text: 'Category Breakdown'),
-            pw.Table.fromTextArray(
+            pw.TableHelper.fromTextArray(
               headers: ['Category', 'Amount', 'Percentage'],
               data: categoryTotals.entries.map((entry) {
                 final category = Category.getCategoryById(entry.key);
@@ -141,7 +138,7 @@ class ExportService {
 
             // Transactions Table
             pw.Header(level: 1, text: 'Transactions'),
-            pw.Table.fromTextArray(
+            pw.TableHelper.fromTextArray(
               headers: ['Date', 'Description', 'Category', 'Amount'],
               data: expenses.map((expense) {
                 final category = Category.getCategoryById(expense.category);

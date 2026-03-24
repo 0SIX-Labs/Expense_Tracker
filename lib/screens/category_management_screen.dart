@@ -166,7 +166,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TabBar(
@@ -179,7 +179,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white.withOpacity(0.7),
+                  unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
                   tabs: const [
                     Tab(text: 'Expense'),
                     Tab(text: 'Income'),
@@ -222,14 +222,14 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
             Icon(
               isIncome ? Icons.attach_money : Icons.category,
               size: 64,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
               'No custom ${isIncome ? 'income' : 'expense'} categories yet',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 8),
@@ -237,7 +237,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
               'Tap + to add your first category',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ),
           ],
@@ -288,7 +288,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   category.isIncomeCategory ? 'Income' : 'Expense',
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -302,7 +302,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.edit, color: Colors.white, size: 18),
@@ -314,7 +314,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.1),
+                    color: Colors.red.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(Icons.delete, color: Colors.red[300], size: 18),
@@ -336,7 +336,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF667eea).withOpacity(0.4),
+            color: const Color(0xFF667eea).withValues(alpha: 0.4),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -376,10 +376,12 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Category Name',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -406,13 +408,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: !isIncome
-                                ? const Color(0xFF667eea).withOpacity(0.3)
-                                : Colors.white.withOpacity(0.1),
+                                ? const Color(0xFF667eea).withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: !isIncome
                                   ? const Color(0xFF667eea)
-                                  : Colors.white.withOpacity(0.3),
+                                  : Colors.white.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Text(
@@ -440,13 +442,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: isIncome
-                                ? Colors.green.withOpacity(0.3)
-                                : Colors.white.withOpacity(0.1),
+                                ? Colors.green.withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: isIncome
                                   ? Colors.green
-                                  : Colors.white.withOpacity(0.3),
+                                  : Colors.white.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Text(
@@ -485,8 +487,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(0xFF667eea).withOpacity(0.3)
-                              : Colors.white.withOpacity(0.1),
+                              ? const Color(0xFF667eea).withValues(alpha: 0.3)
+                              : Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: isSelected
@@ -560,9 +562,18 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   isIncomeCategory: isIncome,
                 );
 
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
                 if (result.isSuccess) {
+                  if (!mounted) return;
                   Navigator.pop(context);
                   _loadCategories();
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Category created successfully'),
@@ -570,6 +581,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                     ),
                   );
                 } else {
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
@@ -613,10 +625,12 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Category Name',
-                    labelStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
                     focusedBorder: const OutlineInputBorder(
@@ -643,13 +657,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: !isIncome
-                                ? const Color(0xFF667eea).withOpacity(0.3)
-                                : Colors.white.withOpacity(0.1),
+                                ? const Color(0xFF667eea).withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: !isIncome
                                   ? const Color(0xFF667eea)
-                                  : Colors.white.withOpacity(0.3),
+                                  : Colors.white.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Text(
@@ -677,13 +691,13 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: isIncome
-                                ? Colors.green.withOpacity(0.3)
-                                : Colors.white.withOpacity(0.1),
+                                ? Colors.green.withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: isIncome
                                   ? Colors.green
-                                  : Colors.white.withOpacity(0.3),
+                                  : Colors.white.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Text(
@@ -722,8 +736,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(0xFF667eea).withOpacity(0.3)
-                              : Colors.white.withOpacity(0.1),
+                              ? const Color(0xFF667eea).withValues(alpha: 0.3)
+                              : Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: isSelected
@@ -793,15 +807,24 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                 final updatedCategory = category.copyWith(
                   name: nameController.text.trim(),
                   iconCodePoint: selectedIcon.codePoint,
-                  colorValue: selectedColor.value,
+                  colorValue: selectedColor.toARGB32(),
                   isIncomeCategory: isIncome,
                 );
 
                 final result = await _categoryService.update(updatedCategory);
 
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
+                if (!mounted) return;
                 if (result.isSuccess) {
+                  if (!mounted) return;
                   Navigator.pop(context);
                   _loadCategories();
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Category updated successfully'),
@@ -809,6 +832,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                     ),
                   );
                 } else {
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
@@ -838,7 +862,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
         ),
         content: Text(
           'Are you sure you want to delete "${category.name}"?',
-          style: TextStyle(color: Colors.white.withOpacity(0.8)),
+          style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
         ),
         actions: [
           TextButton(
@@ -849,9 +873,18 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
             onPressed: () async {
               final result = await _categoryService.delete(category.id);
 
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
+              if (!mounted) return;
               if (result.isSuccess) {
+                if (!mounted) return;
                 Navigator.pop(context);
                 _loadCategories();
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Category deleted successfully'),
@@ -859,6 +892,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   ),
                 );
               } else {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(

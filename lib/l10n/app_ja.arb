@@ -1,0 +1,110 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Fynz - 予算＆支出管理アプリ",
+  "welcomeToFynz": "Fynzへようこそ",
+  "hello": "こんにちは、{userName}さん！",
+  "@hello": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+  "settings": "設定",
+  "home": "ホーム",
+  "analytics": "分析",
+  "budget": "予算",
+  "addExpense": "支出を追加",
+  "monthlyOverview": "月間概要",
+  "income": "収入",
+  "spent": "使用済み",
+  "remaining": "残り",
+  "thisMonth": "今月",
+  "thisWeek": "今週",
+  "spendingByCategory": "カテゴリ別支出",
+  "recentTransactions": "最近のトランザクション",
+  "seeAll": "すべて表示",
+  "onTrack": "順調",
+  "overBudget": "予算超過",
+  "categories": "カテゴリ",
+  "currency": "通貨",
+  "monthStartDay": "月の開始日",
+  "darkMode": "ダークモード",
+  "notifications": "通知",
+  "exportData": "データをエクスポート",
+  "exportCSV": "CSVをエクスポート",
+  "exportPDF": "PDFをエクスポート",
+  "about": "について",
+  "version": "バージョン",
+  "developer": "開発者",
+  "license": "ライセンス",
+  "privacyPolicy": "プライバシーポリシー",
+  "termsOfService": "利用規約",
+  "cancel": "キャンセル",
+  "delete": "削除",
+  "save": "保存",
+  "edit": "編集",
+  "editProfile": "プロフィール編集",
+  "yourName": "お名前",
+  "personalizeExperience": "エクスペリエンスをカスタマイズ",
+  "selectCurrency": "通貨を選択",
+  "currencyAutoDetected": "通貨が自動検出されました",
+  "whenMonthStart": "月をいつから始めますか？",
+  "monthStartDescription": "請求サイクルが始まる日を選択して、支出を正確に追跡してください",
+  "setMonthlyIncome": "月収を設定",
+  "monthlyIncomeDescription": "収入源を入力して、予算を効果的に計画するのに役立ててください",
+  "allSet": "完成しました！",
+  "allSetDescription": "プロフィールの準備ができました。支出の追跡を始めましょう",
+  "getStarted": "始めましょう",
+  "next": "次へ",
+  "skip": "スキップ",
+  "salary": "給与",
+  "freelance": "フリーランス",
+  "investment": "投資",
+  "other": "その他",
+  "otherIncome": "その他の収入",
+  "foodAndDining": "食事＆ダイニング",
+  "transport": "交通",
+  "shopping": "買い物",
+  "entertainment": "娯楽",
+  "billsAndUtilities": "請求＆ユーティリティ",
+  "healthcare": "ヘルスケア",
+  "education": "教育",
+  "travel": "旅行",
+  "groceries": "食料品",
+  "deleteExpense": "支出を削除",
+  "confirmDelete": "この支出を削除してもよろしいですか？",
+  "expenseDeleted": "支出が正常に削除されました",
+  "profileUpdated": "プロフィールが正常に更新されました",
+  "manageCategories": "カテゴリを管理",
+  "categoriesDescription": "カスタム支出収入カテゴリを作成および管理",
+  "getBudgetAlerts": "予算アラートとリマインダーを受け取る",
+  "enableDarkTheme": "ダークテーマを有効にする",
+  "customizeExperience": "エクスペリエンスをカスタマイズ",
+  "profile": "プロフィール",
+  "monthStartsOnDay": "月は{day}日に始まります",
+  "@monthStartsOnDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "yourBillingCycle": "請求サイクルは毎月{day}日に開始されます",
+  "@yourBillingCycle": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyIncomeSources": "月収源",
+  "dayOne": "1日",
+  "dayTwentyEight": "28日",
+  "selected": "選択済み",
+  "thisCurrencyWillBeUsed": "この通貨はアプリ全体のすべてのトランザクションに使用されます",
+  "pleaseEnterYourName": "お名前を入力してください",
+  "failedToSaveProfile": "プロフィールの保存に失敗しました",
+  "anErrorOccurred": "エラーが発生しました。もう一度お試しください",
+  "failedToDeleteExpense": "支出の削除に失敗しました"
+}

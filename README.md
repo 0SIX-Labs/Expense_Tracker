@@ -1,6 +1,8 @@
-# Expense Tracker
+# Fynz - Budget & Expense Tracker
 
-A beautiful, production-ready Flutter expense tracking application with Liquid Glass design aesthetic.
+A beautiful, production-ready Flutter budget & expense tracking application with Liquid Glass design aesthetic.
+
+**Bundle Identifier:** com.osixlabs.fynz
 
 ## Features
 
@@ -61,21 +63,21 @@ lib/
 This app supports three environments with different configurations:
 
 ### Development (`main_dev.dart`)
-- App Name: "Expense Tracker (Dev)"
+- App Name: "Fynz (Dev)"
 - Debug Banner: Shown
 - Logging: Verbose
 - Analytics: Disabled
 - Hive Prefix: `dev_`
 
 ### UAT (`main_uat.dart`)
-- App Name: "Expense Tracker (UAT)"
+- App Name: "Fynz (UAT)"
 - Debug Banner: Hidden
 - Logging: Info only
 - Analytics: Enabled
 - Hive Prefix: `uat_`
 
 ### Production (`main_prod.dart`)
-- App Name: "Expense Tracker"
+- App Name: "Fynz - Budget & Expense Tracker"
 - Debug Banner: Hidden
 - Logging: Errors only
 - Analytics: Enabled

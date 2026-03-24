@@ -43,7 +43,7 @@ class GradientButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: (gradientColors?.first ?? const Color(0xFF667eea))
-                .withOpacity(0.4),
+                .withValues(alpha: 0.4),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -128,7 +128,7 @@ class GlassGradientButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),

@@ -38,7 +38,7 @@ class CustomCategory extends HiveObject {
 
   Color get color => Color(colorValue);
 
-  List<Color> get gradient => [color, color.withOpacity(0.7)];
+  List<Color> get gradient => [color, color.withValues(alpha: 0.7)];
 
   CustomCategory copyWith({
     String? id,
