@@ -29,6 +29,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _selectedMonthStartDay = 1;
   String _selectedCurrency = 'USD';
   bool _isLoading = false;
+<<<<<<< Updated upstream
+=======
+  String _selectedCurrency = '';
+  String _deviceSuggestedCurrency = 'USD';
+  String _selectedLanguage = 'en';
+
+  final List<String> _languages = [
+    'en',
+    'es',
+    'de',
+    'fr',
+    'pt',
+    'ja',
+    'ko',
+    'ru',
+    'hi',
+  ];
+  final Map<String, String> _languageNames = {
+    'en': '🇬🇧 English',
+    'es': '🇪🇸 Español',
+    'de': '🇩🇪 Deutsch',
+    'fr': '🇫🇷 Français',
+    'pt': '🇵🇹 Português',
+    'ja': '🇯🇵 日本語',
+    'ko': '🇰🇷 한국어',
+    'ru': '🇷🇺 Русский',
+    'hi': '🇮🇳 हिन्दी',
+  };
+>>>>>>> Stashed changes
 
   final List<String> _currencies = [
     'USD',
@@ -238,14 +267,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
-            stops: [0.0, 0.5, 1.0],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
+              stops: [0.0, 0.5, 1.0],
+            ),
           ),
+<<<<<<< Updated upstream
         ),
         child: SafeArea(
           child: Column(
@@ -289,10 +322,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: List.generate(
                     _pages.length,
                     (index) => _buildPageIndicator(index),
+=======
+          child: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: _onPageChanged,
+                    physics: _currentPage == 0 || _currentPage == 1
+                        ? const NeverScrollableScrollPhysics()
+                        : const ClampingScrollPhysics(),
+                    itemCount: _pages.length,
+                    itemBuilder: (context, index) {
+                      return _buildPage(_pages[index]);
+                    },
+>>>>>>> Stashed changes
                   ),
                 ),
-              ),
 
+<<<<<<< Updated upstream
               const SizedBox(height: 32),
 
               // Next/Get Started button
@@ -306,11 +355,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   isLoading: _isLoading,
                   gradientColors: _pages[_currentPage].gradientColors,
                   width: double.infinity,
+=======
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _pages.length,
+                      (index) => _buildPageIndicator(index),
+                    ),
+                  ),
+>>>>>>> Stashed changes
                 ),
-              ),
 
-              const SizedBox(height: 48),
-            ],
+                const SizedBox(height: 32),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: GradientButton(
+                    text: _currentPage == _pages.length - 1
+                        ? l10n.getStarted
+                        : l10n.next,
+                    onPressed: _isLoading ? () {} : _nextPage,
+                    isLoading: _isLoading,
+                    gradientColors: _pages[_currentPage].gradientColors,
+                    width: double.infinity,
+                  ),
+                ),
+
+                const SizedBox(height: 48),
+              ],
+            ),
           ),
         ),
       ),
@@ -318,6 +393,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _buildPage(OnboardingPage page) {
+<<<<<<< Updated upstream
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -376,6 +452,217 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+=======
+    final pageIndex = _pages.indexOf(page);
+    final isLanguageCurrencyPage = pageIndex == 0 || pageIndex == 1;
+    final isCalendarPage = pageIndex == 4;
+    final isFormPage = pageIndex >= 2 && pageIndex <= 3;
+    final iconSize = isCalendarPage
+        ? 40.0
+        : (isLanguageCurrencyPage ? 50.0 : (isFormPage ? 50.0 : 120.0));
+    final iconIconSize = isCalendarPage
+        ? 20.0
+        : (isLanguageCurrencyPage ? 26.0 : (isFormPage ? 26.0 : 60.0));
+    final borderRadius = (isLanguageCurrencyPage || isCalendarPage)
+        ? 12.0
+        : (isFormPage ? 15.0 : 30.0);
+    final spacingAfterIcon = isFormPage ? 24.0 : 48.0;
+    final shadowBlur = (isLanguageCurrencyPage || isCalendarPage)
+        ? 10.0
+        : (isFormPage ? 10.0 : 20.0);
+    final shadowOpacity = (isLanguageCurrencyPage || isCalendarPage)
+        ? 0.3
+        : (isFormPage ? 0.2 : 0.3);
+    final shadowOffsetY = (isLanguageCurrencyPage || isCalendarPage)
+        ? 4.0
+        : (isFormPage ? 4.0 : 10.0);
+
+    // All pages use LayoutBuilder and ConstrainedBox for consistent constraints
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLanguageCurrencyPage) ...[
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: page.gradientColors),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: page.gradientColors.first.withValues(
+                            alpha: 0.3,
+                          ),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(page.icon, color: Colors.white, size: 26),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    page.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    page.description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 44),
+                  SizedBox(
+                    height: 200,
+                    child: Transform.translate(
+                      offset: const Offset(-20, 0),
+                      child: page.content ?? const SizedBox.shrink(),
+                    ),
+                  ),
+                ] else ...[
+                  Container(
+                    width: iconSize,
+                    height: iconSize,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: page.gradientColors),
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: page.gradientColors.first.withValues(
+                            alpha: shadowOpacity,
+                          ),
+                          blurRadius: shadowBlur,
+                          offset: Offset(0, shadowOffsetY),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      page.icon,
+                      color: Colors.white,
+                      size: iconIconSize,
+                    ),
+                  ),
+                  SizedBox(height: spacingAfterIcon),
+                  Text(
+                    page.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    page.description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  if (page.content != null) page.content!,
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageSelector() {
+    final selectedIndex = _languages.indexOf(_selectedLanguage);
+
+    return SizedBox(
+      height: 180,
+      child: CupertinoPicker(
+        itemExtent: 100,
+        scrollController: FixedExtentScrollController(
+          initialItem: selectedIndex,
+        ),
+        onSelectedItemChanged: (index) {
+          final newLang = _languages[index];
+          setState(() {
+            _selectedLanguage = newLang;
+          });
+          // Update locale and rebuild widget to reflect language change
+          final localeProvider = Provider.of<LocaleProvider>(
+            context,
+            listen: false,
+          );
+          localeProvider.setLocale(newLang);
+        },
+        children: _languages.map((lang) {
+          return Center(
+            child: Text(
+              _languageNames[lang] ?? lang,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildCurrencySelector() {
+    final selectedIndex = _currencies.indexOf(_selectedCurrency);
+
+    return SizedBox(
+      height: 180,
+      child: CupertinoPicker(
+        itemExtent: 100,
+        scrollController: FixedExtentScrollController(
+          initialItem: selectedIndex,
+        ),
+        onSelectedItemChanged: (index) {
+          setState(() {
+            _selectedCurrency = _currencies[index];
+          });
+        },
+        children: _currencies.map((currency) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 25),
+              child: Text(
+                '${_getCurrencySymbol(currency)}  $currency',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 40,
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+>>>>>>> Stashed changes
   Widget _buildNameInput() {
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -394,6 +681,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           TextFormField(
             controller: _nameController,
             style: const TextStyle(color: Colors.white, fontSize: 16),
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
             decoration: InputDecoration(
               hintText: 'Enter your name',
               hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
@@ -425,6 +714,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             'Your billing cycle will start on day $_selectedMonthStartDay of each month',
             style: TextStyle(
               fontSize: 14,
+<<<<<<< Updated upstream
               color: Colors.white.withOpacity(0.8),
             ),
           ),
@@ -460,6 +750,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ],
+=======
+              color: Colors.white.withValues(alpha: 0.8),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          // Day picker wheel
+          SizedBox(
+            height: 120,
+            child: CupertinoPicker(
+              itemExtent: 40,
+              scrollController: FixedExtentScrollController(
+                initialItem: _selectedMonthStartDay - 1,
+              ),
+              onSelectedItemChanged: (index) {
+                setState(() {
+                  _selectedMonthStartDay = index + 1;
+                });
+              },
+              children: List.generate(31, (index) {
+                final day = index + 1;
+                return Center(
+                  child: Text(
+                    '$day',
+                    style: TextStyle(
+                      color: day == _selectedMonthStartDay
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.5),
+                      fontSize: 22,
+                      fontWeight: day == _selectedMonthStartDay
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                    ),
+                  ),
+                );
+              }),
+            ),
+>>>>>>> Stashed changes
           ),
         ],
       ),
@@ -472,6 +800,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+<<<<<<< Updated upstream
           const Text(
             'Monthly Income Sources',
             style: TextStyle(
@@ -479,6 +808,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
+=======
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  l10n.monthlyIncomeSources,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  '$currencySymbol $_selectedCurrency',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
+                ),
+              ),
+            ],
+>>>>>>> Stashed changes
           ),
           const SizedBox(height: 16),
           _buildIncomeField('Salary', _salaryController),
@@ -532,6 +897,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+<<<<<<< Updated upstream
           const Text(
             'Select Currency',
             style: TextStyle(
@@ -583,6 +949,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               );
             }).toList(),
+=======
+          // Privacy Features
+          _buildFeatureRow(
+            icon: Icons.lock_outline,
+            title: l10n.fullyPrivate,
+            description: l10n.allDataStaysOnDevice,
+          ),
+
+          const SizedBox(height: 16),
+
+          _buildFeatureRow(
+            icon: Icons.cloud_off,
+            title: l10n.noBackend,
+            description: l10n.noServerNoAccount,
+          ),
+
+          const SizedBox(height: 16),
+
+          _buildFeatureRow(
+            icon: Icons.security,
+            title: l10n.fullyOffline,
+            description: l10n.worksWithoutInternet,
+          ),
+
+          const SizedBox(height: 16),
+
+          _buildFeatureRow(
+            icon: Icons.speed,
+            title: l10n.lightningFast,
+            description: l10n.instantAccessNoLoading,
+>>>>>>> Stashed changes
           ),
         ],
       ),

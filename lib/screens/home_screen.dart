@@ -3,14 +3,365 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import '../models/income.dart';
+import '../models/budget.dart';
 import '../services/services.dart';
 import '../widgets/glass_card.dart';
-import '../widgets/expense_card.dart';
 import '../core/core.dart';
 import 'add_expense_screen.dart';
 import 'analytics_screen.dart';
 import 'budget_screen.dart';
 import 'settings_screen.dart';
+import 'transaction_history_screen.dart';
+
+class ExpandableCategoryCard extends StatefulWidget {
+  final Category category;
+  final double amount;
+  final double percentage;
+  final VoidCallback onToggle;
+  final List<Expense> expenses;
+
+  const ExpandableCategoryCard({
+    super.key,
+    required this.category,
+    required this.amount,
+    required this.percentage,
+    required this.onToggle,
+    required this.expenses,
+  });
+
+  @override
+  State<ExpandableCategoryCard> createState() => _ExpandableCategoryCardState();
+}
+
+class _ExpandableCategoryCardState extends State<ExpandableCategoryCard>
+    with SingleTickerProviderStateMixin {
+  bool _isExpanded = false;
+  late AnimationController _animationController;
+  late Animation<double> _heightAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _heightAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _toggleExpansion() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+    widget.onToggle();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: _toggleExpansion,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  // Category Icon with hover effect
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: widget.category.gradient,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: widget.category.color.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      widget.category.icon,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+
+                  // Category Name and Amount
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.category.name,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        FutureBuilder<NumberFormat>(
+                          future: CurrencyUtils.getCurrencyFormatter(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Text('Loading...');
+                            } else if (snapshot.hasError) {
+                              return const Text('Error loading currency');
+                            } else if (snapshot.hasData &&
+                                snapshot.data != null) {
+                              final currencyFormat = snapshot.data!;
+                              return Text(
+                                currencyFormat.format(widget.amount),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white.withValues(alpha: 0.7),
+                                ),
+                              );
+                            } else {
+                              return const Text('0.00');
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Progress Bar and Expand Icon
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${widget.percentage.toStringAsFixed(1)}%',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Icon(
+                              _isExpanded
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: widget.percentage / 100,
+                            backgroundColor: Colors.white.withValues(
+                              alpha: 0.1,
+                            ),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              widget.category.color,
+                            ),
+                            minHeight: 6,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        // Budget Details (Expanded Content)
+        SizeTransition(
+          sizeFactor: _heightAnimation,
+          axisAlignment: 0.0,
+          child: _buildBudgetDetails(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBudgetDetails() {
+    if (!_isExpanded) return const SizedBox.shrink();
+
+    return FutureBuilder<List<Budget>>(
+      future: _loadBudgetsForCategory(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Padding(
+            padding: EdgeInsets.only(left: 52, right: 16, bottom: 8),
+            child: LinearProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return const SizedBox.shrink();
+        } else if (snapshot.hasData && snapshot.data != null) {
+          final budgets = snapshot.data!;
+          if (budgets.isEmpty) {
+            return const SizedBox.shrink();
+          }
+
+          return Padding(
+            padding: const EdgeInsets.only(left: 52, right: 16, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Divider(
+                  color: Color(0x4DFFFFFF), // 0.3 alpha = 77 decimal = 0x4D hex
+                  thickness: 1,
+                ),
+                const SizedBox(height: 8),
+                ...budgets.map((budget) => _buildBudgetRow(budget)),
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  Widget _buildBudgetRow(Budget budget) {
+    final spentInBudget = _calculateSpentInBudget(budget);
+    final remaining = budget.amount - spentInBudget;
+    final percentageUsed = budget.amount > 0
+        ? (spentInBudget / budget.amount) * 100
+        : 0;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          // Budget Name
+          Expanded(
+            child: Text(
+              budget.name ?? 'Budget',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.9),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+
+          // Budget Amount
+          Expanded(
+            child: FutureBuilder<NumberFormat>(
+              future: CurrencyUtils.getCurrencyFormatter(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text('Loading...');
+                } else if (snapshot.hasError) {
+                  return const Text('Error loading currency');
+                } else if (snapshot.hasData && snapshot.data != null) {
+                  final currencyFormat = snapshot.data!;
+                  return Text(
+                    currencyFormat.format(spentInBudget),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+                  );
+                } else {
+                  return const Text('0.00');
+                }
+              },
+            ),
+          ),
+
+          // Remaining and Progress
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${percentageUsed.toStringAsFixed(1)}%',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: remaining >= 0 ? Colors.green[300] : Colors.red[300],
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: LinearProgressIndicator(
+                    value: percentageUsed / 100,
+                    backgroundColor: Colors.white.withValues(alpha: 0.1),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      remaining >= 0 ? Colors.green : Colors.red,
+                    ),
+                    minHeight: 4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<List<Budget>> _loadBudgetsForCategory() async {
+    try {
+      final budgetService = BudgetService();
+      final result = await budgetService.getAll();
+      if (result.isSuccess) {
+        return result.data!
+            .where((budget) => budget.categoryId == widget.category.id)
+            .toList();
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  double _calculateSpentInBudget(Budget budget) {
+    final cycleStart = budget.startDate;
+    final cycleEnd = budget.endDate;
+
+    return widget.category.id != null
+        ? widget.expenses
+              .where(
+                (e) =>
+                    e.category == widget.category.id &&
+                    e.date.isAfter(
+                      cycleStart.subtract(const Duration(days: 1)),
+                    ) &&
+                    e.date.isBefore(cycleEnd),
+              )
+              .fold(0.0, (sum, e) => sum + e.amount)
+        : 0.0;
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,20 +373,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
+  ScrollController? _scrollController;
 
   final ExpenseService _expenseService = ExpenseService();
   final UserProfileService _userProfileService = UserProfileService();
   final IncomeService _incomeService = IncomeService();
+  final BudgetService _budgetService = BudgetService();
 
   List<Expense> _expenses = [];
   String _userName = 'User';
   double _totalIncome = 0;
   double _totalSpent = 0;
   bool _isLoading = true;
+<<<<<<< Updated upstream
+=======
+  int _monthStartDay = 1; // Add this to track billing cycle start day
+  late AppLocalizations l10n;
+  double _appBarOpacity = 1.0;
+>>>>>>> Stashed changes
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _loadData();
   }
 
@@ -160,13 +520,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHomeTab() {
     return CustomScrollView(
       slivers: [
-        // App Bar
+        // Simple App Bar
         SliverAppBar(
           expandedHeight: 120,
           floating: true,
-          pinned: true,
+          pinned: false,
           backgroundColor: Colors.transparent,
           elevation: 0,
+<<<<<<< Updated upstream
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
             title: Column(
@@ -190,11 +551,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ],
+=======
+          flexibleSpace: Center(
+            child: Text(
+              'Hi, ${_userName.isNotEmpty ? _userName[0].toUpperCase() + _userName.substring(1).toLowerCase() : 'User'}',
+              style: const TextStyle(
+                fontSize: 28,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.5,
+              ),
+>>>>>>> Stashed changes
             ),
           ),
         ),
 
-        // Income Summary Card
+        // Monthly Overview Card
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -230,14 +602,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
 
-        // Spending Chart
+        // Expandable Category Cards
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: _buildSpendingChart(),
+            child: _buildExpandableCategoryCards(),
           ),
         ),
 
+<<<<<<< Updated upstream
         // Recent Transactions Header
         SliverToBoxAdapter(
           child: Padding(
@@ -282,6 +655,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }, childCount: _expenses.length),
         ),
 
+=======
+>>>>>>> Stashed changes
         // Bottom padding for FAB
         const SliverToBoxAdapter(child: SizedBox(height: 100)),
       ],
@@ -342,10 +717,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       'Income',
+<<<<<<< Updated upstream
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withOpacity(0.8),
                       ),
+=======
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+>>>>>>> Stashed changes
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -370,10 +749,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       'Spent',
+<<<<<<< Updated upstream
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withOpacity(0.8),
                       ),
+=======
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+>>>>>>> Stashed changes
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -456,6 +839,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 4),
+<<<<<<< Updated upstream
           Text(
             currencyFormat.format(amount),
             style: const TextStyle(
@@ -463,6 +847,33 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
+=======
+          FutureBuilder<NumberFormat>(
+            future: CurrencyUtils.getCurrencyFormatter(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              } else if (snapshot.hasError) {
+                return const Text('Error loading currency');
+              } else if (snapshot.hasData && snapshot.data != null) {
+                final currencyFormat = snapshot.data!;
+                final formattedAmount = currencyFormat.format(amount);
+
+                return Text(
+                  formattedAmount,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                );
+              } else {
+                return const Text('€ 0.00');
+              }
+            },
+>>>>>>> Stashed changes
           ),
         ],
       ),
@@ -505,7 +916,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildNavItem(Icons.home_rounded, 'Home', 0),
                 _buildNavItem(Icons.bar_chart_rounded, 'Analytics', 1),
@@ -536,7 +947,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
         decoration: BoxDecoration(
           color: isSelected
               ? const Color(0xFF667eea).withOpacity(0.4)
@@ -783,6 +1194,276 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Widget _buildQuickAction(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: GlassCard(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddIncomeDialog() {
+    final amountController = TextEditingController();
+    IncomeCategory selectedCategory = IncomeCategory.salary;
+
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: AlertDialog(
+          backgroundColor: const Color(0xFF1a1a2e).withValues(alpha: 0.95),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.add_circle,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Add Income',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          content: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFF667eea).withValues(alpha: 0.1),
+                  const Color(0xFF764ba2).withValues(alpha: 0.1),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2d2d3a),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: DropdownButton<IncomeCategory>(
+                    value: selectedCategory,
+                    dropdownColor: const Color(0xFF1a1a2e),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                    ),
+                    underline: Container(),
+                    style: const TextStyle(color: Colors.white),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                    },
+                    items: IncomeCategory.values.map((category) {
+                      return DropdownMenuItem(
+                        value: category,
+                        child: Text(
+                          category.displayName,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                FutureBuilder<String>(
+                  future: CurrencyUtils.getCurrencySymbol(),
+                  builder: (context, snapshot) {
+                    final prefixText = snapshot.data ?? '\$ ';
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2d2d3a),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: TextField(
+                        controller: amountController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          labelText: 'Amount',
+                          labelStyle: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.7),
+                          ),
+                          prefixText: prefixText,
+                          prefixStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.2),
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFF667eea),
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 14,
+                            horizontal: 12,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white.withValues(alpha: 0.8),
+                backgroundColor: Colors.white.withValues(alpha: 0.1),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                final amount = double.tryParse(amountController.text);
+                if (amount != null && amount > 0) {
+                  final now = DateTime.now();
+                  final result = await _incomeService.create(
+                    amount: amount,
+                    category: selectedCategory,
+                    month: now.month,
+                    year: now.year,
+                  );
+
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (!mounted) return;
+                  if (result.isSuccess) {
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                    _loadData(); // Refresh all data
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Income added successfully'),
+                        backgroundColor: const Color(0xFF22c55e),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  } else {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          result.errorMessage ?? 'Failed to add income',
+                        ),
+                        backgroundColor: const Color(0xFFef4444),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: const Color(0xFF667eea),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Add Income',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+          actionsPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFF667eea), width: 1),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
   void _deleteExpense(Expense expense) {
     showDialog(
       context: context,
@@ -828,8 +1509,57 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildExpandableCategoryCards() {
+    final Map<String, double> categoryTotals = {};
+    for (final expense in _expenses) {
+      categoryTotals[expense.category] =
+          (categoryTotals[expense.category] ?? 0) + expense.amount;
+    }
+
+    final total = categoryTotals.values.fold(
+      0.0,
+      (sum, amount) => sum + amount,
+    );
+    if (total == 0) return const SizedBox.shrink();
+
+    return GlassCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Spending by Category',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ...categoryTotals.entries.map((entry) {
+            final category = Category.getCategoryById(entry.key);
+            final percentage = (entry.value / total) * 100;
+
+            return ExpandableCategoryCard(
+              category: category,
+              amount: entry.value,
+              percentage: percentage,
+              onToggle: () {
+                setState(() {
+                  // Toggle expansion state
+                });
+              },
+              expenses: _expenses,
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
+    _scrollController?.dispose();
     _pageController.dispose();
     super.dispose();
   }

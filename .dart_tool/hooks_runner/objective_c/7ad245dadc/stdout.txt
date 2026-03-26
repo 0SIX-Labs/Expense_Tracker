@@ -1,0 +1,61 @@
+Running `(cd /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/; TMPDIR=/var/folders/v0/4q2b4ccd4v3gdc55x6zvrlv40000gn/T/ PATH=/Users/agent0six/.rbenv/shims:/Users/agent0six/.rbenv/bin:/Users/agent0six/.rbenv/shims:/opt/homebrew/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Python/3.13/bin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Python/3.13/bin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Python/3.13/bin:/opt/homebrew/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Python/3.13/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Users/agent0six/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli:/opt/homebrew/share/flutter/bin/:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pmk/env/global/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/Users/agent0six/.local/bin:/opt/homebrew/share/flutter/bin/:/Users/agent0six/Library/Application Support/Code/User/globalStorage/github.copilot-chat/debugCommand:/Users/agent0six/Library/Application Support/Code/User/globalStorage/github.copilot-chat/copilotCli:/Users/agent0six/.rbenv/shims:/Users/agent0six/.rbenv/bin:/opt/homebrew/opt/python@3.13/libexec/bin:/Users/agent0six/Library/Python/3.13/bin:/Users/agent0six/Library/Python/3.9/bin:/Users/agent0six/Library/Python/3.9/bin:/Users/agent0six/Library/Python/3.13/bin:/Users/agent0six/Library/Python/3.13/bin:/Users/agent0six/Library/Python/3.13/bin:/Users/agent0six/Library/Python/3.13/bin HOME=/Users/agent0six /opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/package_config.json /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/objective_c/7ad245dadc/hook.dill --config=/Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/objective_c/7ad245dadc/input.json )`.
+INFO: 2026-03-25 22:05:40.366326: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+
+INFO: 2026-03-25 22:05:40.376611: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+
+INFO: 2026-03-25 22:05:40.387527: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/include/dart_api_dl.c -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-03-25 22:05:40.387807: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.c -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
+
+INFO: 2026-03-25 22:05:40.388003: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/input_stream_adapter.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objectiINFO: 2026-03-25 22:05:40.388086: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+
+INFO: 2026-03-25 22:05:40.388163: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/observer.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
+
+INFO: 2026-03-25 22:05:40.388237: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/ns_number.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+
+INFO: 2026-03-25 22:05:40.388312: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/protocol.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
+
+INFO: 2026-03-25 22:05:40.388397: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/agent0six/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c_bindings_generated.m -fpic -I src -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-03-25 22:05:40.425533: 
+INFO: 2026-03-25 22:05:40.425596: 
+INFO: 2026-03-25 22:05:40.425618: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-03-25 22:05:40.430136: 
+INFO: 2026-03-25 22:05:40.430195: 
+INFO: 2026-03-25 22:05:40.430216: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
+
+INFO: 2026-03-25 22:05:40.443157: 
+INFO: 2026-03-25 22:05:40.443267: 
+INFO: 2026-03-25 22:05:40.443298: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o
+
+INFO: 2026-03-25 22:05:40.447129: 
+INFO: 2026-03-25 22:05:40.447172: 
+INFO: 2026-03-25 22:05:40.447182: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
+
+INFO: 2026-03-25 22:05:40.448659: 
+INFO: 2026-03-25 22:05:40.448709: 
+INFO: 2026-03-25 22:05:40.448729: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
+
+INFO: 2026-03-25 22:05:40.567537: 
+INFO: 2026-03-25 22:05:40.567573: 
+INFO: 2026-03-25 22:05:40.567583: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+
+INFO: 2026-03-25 22:05:40.571254: 
+INFO: 2026-03-25 22:05:40.571290: 
+INFO: 2026-03-25 22:05:40.571299: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+
+INFO: 2026-03-25 22:05:40.572496: 
+INFO: 2026-03-25 22:05:40.572512: 
+INFO: 2026-03-25 22:05:40.572520: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-03-25 22:05:40.589984: 
+INFO: 2026-03-25 22:05:40.590016: 
+INFO: 2026-03-25 22:05:40.590027: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-03-25 22:05:40.590302: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/test/util.c.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o -o /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
+
+INFO: 2026-03-25 22:05:40.613358: 
+INFO: 2026-03-25 22:05:40.613409: 
+INFO: 2026-03-25 22:05:40.613421: Generated /Users/agent0six/Documents/GitHub/Expense_Tracker/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
+

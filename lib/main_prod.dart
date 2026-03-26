@@ -70,11 +70,71 @@ class ExpenseTrackerApp extends StatelessWidget {
             title: EnvironmentManager.config.appName,
             debugShowCheckedModeBanner:
                 EnvironmentManager.config.showDebugBanner,
+<<<<<<< Updated upstream
             theme: themeProvider.lightTheme,
             darkTheme: themeProvider.darkTheme,
             themeMode: themeProvider.isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
+=======
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF667eea),
+                brightness: Brightness.light,
+              ),
+              useMaterial3: true,
+              fontFamily: 'Inter',
+              scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(color: Colors.black87),
+                bodyMedium: TextStyle(color: Colors.black87),
+                titleLarge: TextStyle(color: Colors.black87),
+                titleMedium: TextStyle(color: Colors.black87),
+              ),
+            ),
+            darkTheme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF667eea),
+                brightness: Brightness.dark,
+              ),
+              useMaterial3: true,
+              fontFamily: 'Inter',
+              scaffoldBackgroundColor: const Color(0xFF121212),
+              textTheme: const TextTheme(
+                bodyLarge: TextStyle(color: Colors.white70),
+                bodyMedium: TextStyle(color: Colors.white70),
+                titleLarge: TextStyle(color: Colors.white),
+                titleMedium: TextStyle(color: Colors.white),
+              ),
+            ),
+            themeMode: ThemeMode.light,
+            locale: localeProvider.locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en'),
+              Locale('es'),
+              Locale('de'),
+              Locale('fr'),
+              Locale('pt'),
+              Locale('ja'),
+              Locale('ko'),
+              Locale('ru'),
+              Locale('hi'),
+            ],
+            localeResolutionCallback: (locale, supportedLocales) {
+              for (var supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale?.languageCode) {
+                  return supportedLocale;
+                }
+              }
+              return const Locale('en');
+            },
+>>>>>>> Stashed changes
             home: const AppInitializer(),
           );
         },

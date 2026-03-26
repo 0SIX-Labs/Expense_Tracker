@@ -3,7 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import '../services/expense_service.dart';
 import '../widgets/glass_card.dart';
+import '../utils/currency_utils.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
@@ -16,12 +18,61 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   String _selectedPeriod = 'This Month';
   final List<String> _periods = ['This Week', 'This Month', 'This Year'];
 
-  // Initialize with empty list - users will add their own expenses
-  final List<Expense> _expenses = [];
+  // Load expenses from database
+  List<Expense> _expenses = [];
+  bool _isLoading = true;
+  final ExpenseService _expenseService = ExpenseService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExpenses();
+  }
+
+  Future<void> _loadExpenses() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final result = await _expenseService.getAll();
+      if (result.isSuccess && result.data != null) {
+        setState(() {
+          _expenses = result.data!;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  List<Expense> get _filteredExpenses {
+    final now = DateTime.now();
+    switch (_selectedPeriod) {
+      case 'This Week':
+        final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+        return _expenses.where((e) => e.date.isAfter(startOfWeek)).toList();
+      case 'This Month':
+        final startOfMonth = DateTime(now.year, now.month, 1);
+        return _expenses.where((e) => e.date.isAfter(startOfMonth)).toList();
+      case 'This Year':
+        final startOfYear = DateTime(now.year, 1, 1);
+        return _expenses.where((e) => e.date.isAfter(startOfYear)).toList();
+      default:
+        return _expenses;
+    }
+  }
 
   Map<String, double> get _categoryTotals {
     final totals = <String, double>{};
-    for (final expense in _expenses) {
+    for (final expense in _filteredExpenses) {
       totals[expense.category] =
           (totals[expense.category] ?? 0) + expense.amount;
     }
@@ -29,7 +80,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   double get _totalExpenses {
-    return _expenses.fold(0.0, (sum, e) => sum + e.amount);
+    return _filteredExpenses.fold(0.0, (sum, e) => sum + e.amount);
   }
 
   List<PieChartSectionData> get _pieChartSections {
@@ -51,6 +102,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             fontSize: 12,
             fontWeight: FontWeight.bold,
             color: Colors.white,
+            shadows: [
+              Shadow(
+                color: Colors.black26,
+                offset: Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
           ),
         ),
       );
@@ -61,6 +119,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate responsive pie chart height based on screen size
+    final pieChartHeight = screenHeight * 0.25; // 25% of screen height
+    final minPieChartHeight = 180.0;
+    final maxPieChartHeight = 300.0;
+    final actualPieChartHeight = pieChartHeight.clamp(
+      minPieChartHeight,
+      maxPieChartHeight,
+    );
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -95,8 +165,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           _buildTotalSpendingCard(),
           const SizedBox(height: 24),
 
-          // Pie Chart
-          _buildPieChartCard(),
+          // Pie Chart with responsive height
+          _buildPieChartCard(actualPieChartHeight),
           const SizedBox(height: 24),
 
           // Category Breakdown
@@ -170,13 +240,27 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            currencyFormat.format(_totalExpenses),
-            style: const TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          FutureBuilder<NumberFormat>(
+            future: CurrencyUtils.getCurrencyFormatter(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Text('Loading...');
+              } else if (snapshot.hasError) {
+                return const Text('Error loading currency');
+              } else if (snapshot.hasData && snapshot.data != null) {
+                final currencyFormat = snapshot.data!;
+                return Text(
+                  currencyFormat.format(_totalExpenses),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                );
+              } else {
+                return const Text('€ 0.00');
+              }
+            },
           ),
           const SizedBox(height: 16),
           Row(
@@ -219,7 +303,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     );
   }
 
-  Widget _buildPieChartCard() {
+  Widget _buildPieChartCard(double height) {
     return GlassCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -235,7 +319,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: 200,
+            height: height,
             child: PieChart(
               PieChartData(
                 sections: _pieChartSections,
@@ -343,7 +427,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   Widget _buildTopExpenses() {
-    final sortedExpenses = List<Expense>.from(_expenses)
+    final sortedExpenses = List<Expense>.from(_filteredExpenses)
       ..sort((a, b) => b.amount.compareTo(a.amount));
     final topExpenses = sortedExpenses.take(5).toList();
     final currencyFormat = NumberFormat.currency(

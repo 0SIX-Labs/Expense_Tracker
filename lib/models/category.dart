@@ -15,77 +15,77 @@ class Category {
     required this.gradient,
   });
 
-  // Pre-defined categories with Liquid Glass gradient colors
+  // Pre-defined categories optimized for white text contrast with Glass theme
   static const List<Category> defaultCategories = [
     Category(
       id: 'food',
       name: 'Food & Dining',
       icon: Icons.restaurant,
-      color: Color(0xFFFF6B6B),
-      gradient: [Color(0xFFFF6B6B), Color(0xFFFF8E8E)],
+      color: Color(0xFFE74C3C), // Darker red for better white text contrast
+      gradient: [Color(0xFFE74C3C), Color(0xFFC0392B)],
     ),
     Category(
       id: 'transport',
       name: 'Transport',
       icon: Icons.directions_car,
-      color: Color(0xFF4ECDC4),
-      gradient: [Color(0xFF4ECDC4), Color(0xFF6EE7DF)],
+      color: Color(0xFF16A085), // Darker teal for better white text contrast
+      gradient: [Color(0xFF16A085), Color(0xFF138D75)],
     ),
     Category(
       id: 'shopping',
       name: 'Shopping',
       icon: Icons.shopping_bag,
-      color: Color(0xFFFFB347),
-      gradient: [Color(0xFFFFB347), Color(0xFFFFCC80)],
+      color: Color(0xFFD35400), // Darker orange for better white text contrast
+      gradient: [Color(0xFFD35400), Color(0xFFB03A2E)],
     ),
     Category(
       id: 'entertainment',
       name: 'Entertainment',
       icon: Icons.movie,
-      color: Color(0xFF9B59B6),
-      gradient: [Color(0xFF9B59B6), Color(0xFFBB8FCE)],
+      color: Color(0xFF8E44AD), // Darker purple for better white text contrast
+      gradient: [Color(0xFF8E44AD), Color(0xFF7D3C98)],
     ),
     Category(
       id: 'bills',
       name: 'Bills & Utilities',
       icon: Icons.receipt_long,
-      color: Color(0xFF3498DB),
-      gradient: [Color(0xFF3498DB), Color(0xFF5DADE2)],
+      color: Color(0xFF2980B9), // Darker blue for better white text contrast
+      gradient: [Color(0xFF2980B9), Color(0xFF21618C)],
     ),
     Category(
       id: 'healthcare',
       name: 'Healthcare',
       icon: Icons.local_hospital,
-      color: Color(0xFFE74C3C),
-      gradient: [Color(0xFFE74C3C), Color(0xFFEC7063)],
+      color: Color(0xFFC0392B), // Darker red for better white text contrast
+      gradient: [Color(0xFFC0392B), Color(0xFF922B21)],
     ),
     Category(
       id: 'education',
       name: 'Education',
       icon: Icons.school,
-      color: Color(0xFF2ECC71),
-      gradient: [Color(0xFF2ECC71), Color(0xFF58D68D)],
+      color: Color(0xFF27AE60), // Darker green for better white text contrast
+      gradient: [Color(0xFF27AE60), Color(0xFF229954)],
     ),
     Category(
       id: 'travel',
       name: 'Travel',
       icon: Icons.flight,
-      color: Color(0xFF1ABC9C),
-      gradient: [Color(0xFF1ABC9C), Color(0xFF48C9B0)],
+      color: Color(0xFF154360), // Darker teal for better white text contrast
+      gradient: [Color(0xFF154360), Color(0xFF0B5345)],
     ),
     Category(
       id: 'groceries',
       name: 'Groceries',
       icon: Icons.shopping_cart,
-      color: Color(0xFF95A5A6),
-      gradient: [Color(0xFF95A5A6), Color(0xFFBDC3C7)],
+      color: Color(0xFF5D6D7E), // Darker gray for better white text contrast
+      gradient: [Color(0xFF5D6D7E), Color(0xFF4A5568)],
     ),
     Category(
       id: 'other',
       name: 'Other',
       icon: Icons.more_horiz,
-      color: Color(0xFF7F8C8D),
-      gradient: [Color(0xFF7F8C8D), Color(0xFF95A5A6)],
+      color: Color(0xFF4A5568), // Darker gray for better white text contrast
+      gradient: [Color(0xFF4A5568), Color(0xFF34495E)],
     ),
   ];
 

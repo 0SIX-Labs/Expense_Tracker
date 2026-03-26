@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../models/custom_category.dart';
 import '../services/services.dart';
@@ -122,46 +123,49 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
-            stops: [0.0, 0.5, 1.0],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
+              stops: [0.0, 0.5, 1.0],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const Expanded(
-                      child: Text(
-                        'Manage Categories',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+          child: SafeArea(
+            child: Column(
+              children: [
+                // Header
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
                           color: Colors.white,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 48),
-                  ],
+                      const Expanded(
+                        child: Text(
+                          'Manage Categories',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 48),
+                    ],
+                  ),
                 ),
-              ),
 
+<<<<<<< Updated upstream
               // Tab Bar
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -184,22 +188,47 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                     Tab(text: 'Expense'),
                     Tab(text: 'Income'),
                   ],
+=======
+                // Tab Bar
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicator: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF667eea), Color(0xFF764ba2)],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
+                    tabs: const [
+                      Tab(text: 'Expense'),
+                      Tab(text: 'Income'),
+                    ],
+                  ),
+>>>>>>> Stashed changes
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Tab Bar View
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildCategoryList(false),
-                    _buildCategoryList(true),
-                  ],
+                // Tab Bar View
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildCategoryList(false),
+                      _buildCategoryList(true),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -351,6 +380,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
     );
   }
 
+  // Dialog background color constant for consistency
+  static const Color _dialogBg = Color(0xFF1E1E2E);
+  static const double _dialogOpacity = 0.88;
+
   void _showAddCategoryDialog() {
     final nameController = TextEditingController();
     IconData selectedIcon = _availableIcons.first;
@@ -359,6 +392,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
 
     showDialog(
       context: context,
+<<<<<<< Updated upstream
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           backgroundColor: const Color(0xFF2D2D3A),
@@ -380,38 +414,153 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.white.withOpacity(0.3),
+=======
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            backgroundColor: _dialogBg.withValues(alpha: _dialogOpacity),
+            title: const Text(
+              'Add Category',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Category Name',
+                      labelStyle: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+>>>>>>> Stashed changes
                       ),
                     ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Category Type',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Category Type',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setDialogState(() {
+                              isIncome = false;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: !isIncome
+                                  ? const Color(
+                                      0xFF667eea,
+                                    ).withValues(alpha: 0.3)
+                                  : Colors.white.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: !isIncome
+                                    ? const Color(0xFF667eea)
+                                    : Colors.white.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Text(
+                              'Expense',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: !isIncome
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setDialogState(() {
+                              isIncome = true;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: isIncome
+                                  ? Colors.green.withValues(alpha: 0.3)
+                                  : Colors.white.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: isIncome
+                                    ? Colors.green
+                                    : Colors.white.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Text(
+                              'Income',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: isIncome
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Select Icon',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _availableIcons.map((icon) {
+                      final isSelected = icon == selectedIcon;
+                      return GestureDetector(
                         onTap: () {
                           setDialogState(() {
-                            isIncome = false;
+                            selectedIcon = icon;
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
+<<<<<<< Updated upstream
                             color: !isIncome
                                 ? const Color(0xFF667eea).withOpacity(0.3)
                                 : Colors.white.withOpacity(0.1),
+=======
+                            color: isSelected
+                                ? const Color(0xFF667eea).withValues(alpha: 0.3)
+                                : Colors.white.withValues(alpha: 0.1),
+>>>>>>> Stashed changes
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: !isIncome
+                              color: isSelected
                                   ? const Color(0xFF667eea)
+<<<<<<< Updated upstream
                                   : Colors.white.withOpacity(0.3),
                             ),
                           ),
@@ -423,22 +572,38 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                               fontWeight: !isIncome
                                   ? FontWeight.bold
                                   : FontWeight.normal,
+=======
+                                  : Colors.transparent,
+>>>>>>> Stashed changes
                             ),
                           ),
+                          child: Icon(icon, color: Colors.white, size: 24),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: GestureDetector(
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Select Color',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _availableColors.map((color) {
+                      final isSelected = color == selectedColor;
+                      return GestureDetector(
                         onTap: () {
                           setDialogState(() {
-                            isIncome = true;
+                            selectedColor = color;
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
+<<<<<<< Updated upstream
                             color: isIncome
                                 ? Colors.green.withOpacity(0.3)
                                 : Colors.white.withOpacity(0.1),
@@ -534,8 +699,74 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                   }).toList(),
                 ),
               ],
+=======
+                            color: color,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+>>>>>>> Stashed changes
             ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  if (nameController.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please enter a category name'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  final result = await _categoryService.create(
+                    name: nameController.text.trim(),
+                    icon: selectedIcon,
+                    color: selectedColor,
+                    isIncomeCategory: isIncome,
+                  );
+
+                  if (!mounted) return;
+                  if (result.isSuccess) {
+                    Navigator.pop(context);
+                    _loadCategories();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Category created successfully'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          result.errorMessage ?? 'Failed to create category',
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Create'),
+              ),
+            ],
           ),
+<<<<<<< Updated upstream
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -583,6 +814,8 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
               child: const Text('Create'),
             ),
           ],
+=======
+>>>>>>> Stashed changes
         ),
       ),
     );
@@ -596,15 +829,17 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
 
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          backgroundColor: const Color(0xFF2D2D3A),
-          title: const Text(
-            'Edit Category',
-            style: TextStyle(color: Colors.white),
-          ),
-          content: SingleChildScrollView(
-            child: Column(
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            backgroundColor: _dialogBg.withValues(alpha: _dialogOpacity),
+            title: const Text(
+              'Edit Category',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -772,12 +1007,11 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
                 ),
               ],
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
             TextButton(
               onPressed: () async {
                 if (nameController.text.trim().isEmpty) {
@@ -799,6 +1033,10 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
 
                 final result = await _categoryService.update(updatedCategory);
 
+<<<<<<< Updated upstream
+=======
+                if (!mounted) return;
+>>>>>>> Stashed changes
                 if (result.isSuccess) {
                   Navigator.pop(context);
                   _loadCategories();
@@ -849,9 +1087,16 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen>
             onPressed: () async {
               final result = await _categoryService.delete(category.id);
 
+<<<<<<< Updated upstream
               if (result.isSuccess) {
                 Navigator.pop(context);
                 _loadCategories();
+=======
+                if (!mounted) return;
+                if (result.isSuccess) {
+                  Navigator.pop(context);
+                  _loadCategories();
+>>>>>>> Stashed changes
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Category deleted successfully'),

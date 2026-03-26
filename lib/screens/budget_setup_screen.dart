@@ -83,14 +83,18 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
-            stops: [0.0, 0.5, 1.0],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
+              stops: [0.0, 0.5, 1.0],
+            ),
           ),
+<<<<<<< Updated upstream
         ),
         child: SafeArea(
           child: Column(
@@ -126,17 +130,25 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: GlassCard(
                   padding: const EdgeInsets.all(20),
+=======
+          child: SafeArea(
+            child: Column(
+              children: [
+                // Header
+                Padding(
+                  padding: const EdgeInsets.all(24),
+>>>>>>> Stashed changes
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Select Currency',
+                        'Set Your Budgets',
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
+<<<<<<< Updated upstream
                       const SizedBox(height: 12),
                       Wrap(
                         spacing: 8,
@@ -187,44 +199,53 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                             ),
                           );
                         }).toList(),
+=======
+                      const SizedBox(height: 8),
+                      Text(
+                        'Define how much you want to spend in each category',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
+                        textAlign: TextAlign.center,
+>>>>>>> Stashed changes
                       ),
                     ],
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
-
-              // Period Selector
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: GlassCard(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Budget Period',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                // Currency Selector
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: GlassCard(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Select Currency',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: BudgetPeriod.values.map((period) {
-                          final isSelected = _selectedPeriod == period;
-                          return Expanded(
-                            child: GestureDetector(
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: _currencies.map((currency) {
+                            final isSelected = _selectedCurrency == currency;
+                            return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  _selectedPeriod = period;
+                                  _selectedCurrency = currency;
                                 });
                               },
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
+                                  horizontal: 16,
+                                  vertical: 10,
                                 ),
                                 decoration: BoxDecoration(
                                   gradient: isSelected
@@ -235,11 +256,18 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                                           ],
                                         )
                                       : null,
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: isSelected
+                                      ? null
+                                      : Colors.white.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? Colors.transparent
+                                        : Colors.white.withValues(alpha: 0.2),
+                                  ),
                                 ),
                                 child: Text(
-                                  period.name.capitalize(),
-                                  textAlign: TextAlign.center,
+                                  currency,
                                   style: TextStyle(
                                     color: isSelected
                                         ? Colors.white
@@ -250,41 +278,110 @@ class _BudgetSetupScreenState extends State<BudgetSetupScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Budget List
-              Expanded(
-                child: ListView.builder(
+                // Period Selector
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: Category.defaultCategories.length,
-                  itemBuilder: (context, index) {
-                    final category = Category.defaultCategories[index];
-                    return _buildBudgetItem(category);
-                  },
+                  child: GlassCard(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Budget Period',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: BudgetPeriod.values.map((period) {
+                            final isSelected = _selectedPeriod == period;
+                            return Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedPeriod = period;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: isSelected
+                                        ? const LinearGradient(
+                                            colors: [
+                                              Color(0xFF667eea),
+                                              Color(0xFF764ba2),
+                                            ],
+                                          )
+                                        : null,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    period.name.capitalize(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.white70,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
 
-              // Save Button
-              Padding(
-                padding: const EdgeInsets.all(24),
-                child: GradientButton(
-                  text: 'Save Budgets',
-                  onPressed: _saveBudgets,
-                  isLoading: _isLoading,
-                  gradientColors: const [Color(0xFF667eea), Color(0xFF764ba2)],
-                  width: double.infinity,
+                const SizedBox(height: 16),
+
+                // Budget List
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    itemCount: Category.defaultCategories.length,
+                    itemBuilder: (context, index) {
+                      final category = Category.defaultCategories[index];
+                      return _buildBudgetItem(category);
+                    },
+                  ),
                 ),
-              ),
-            ],
+
+                // Save Button
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: GradientButton(
+                    text: 'Save Budgets',
+                    onPressed: _saveBudgets,
+                    isLoading: _isLoading,
+                    gradientColors: const [
+                      Color(0xFF667eea),
+                      Color(0xFF764ba2),
+                    ],
+                    width: double.infinity,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

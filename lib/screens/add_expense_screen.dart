@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import '../services/expense_service.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/gradient_button.dart';
 
@@ -49,58 +50,61 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final isEditing = widget.expense != null;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
-            stops: [0.0, 0.5, 1.0],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF667eea), Color(0xFF764ba2), Color(0xFFf093fb)],
+              stops: [0.0, 0.5, 1.0],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // App Bar
-              _buildAppBar(isEditing),
+          child: SafeArea(
+            child: Column(
+              children: [
+                // App Bar
+                _buildAppBar(isEditing),
 
-              // Form
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // Amount Input
-                        _buildAmountInput(),
-                        const SizedBox(height: 24),
+                // Form
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Amount Input
+                          _buildAmountInput(),
+                          const SizedBox(height: 24),
 
-                        // Title Input
-                        _buildTitleInput(),
-                        const SizedBox(height: 24),
+                          // Title Input
+                          _buildTitleInput(),
+                          const SizedBox(height: 24),
 
-                        // Category Selection
-                        _buildCategorySelection(),
-                        const SizedBox(height: 24),
+                          // Category Selection
+                          _buildCategorySelection(),
+                          const SizedBox(height: 24),
 
-                        // Date Selection
-                        _buildDateSelection(),
-                        const SizedBox(height: 24),
+                          // Date Selection
+                          _buildDateSelection(),
+                          const SizedBox(height: 24),
 
-                        // Notes Input
-                        _buildNotesInput(),
-                        const SizedBox(height: 32),
+                          // Notes Input
+                          _buildNotesInput(),
+                          const SizedBox(height: 32),
 
-                        // Save Button
-                        _buildSaveButton(isEditing),
-                      ],
+                          // Save Button
+                          _buildSaveButton(isEditing),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -430,23 +434,74 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _isLoading = true;
     });
 
-    // Simulate saving delay
-    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      final expenseService = ExpenseService();
 
-    final expense = Expense(
-      id: widget.expense?.id,
-      amount: double.parse(_amountController.text),
-      category: _selectedCategory,
-      date: _selectedDate,
-      title: _titleController.text.isEmpty ? null : _titleController.text,
-      notes: _notesController.text.isEmpty ? null : _notesController.text,
-      createdAt: widget.expense?.createdAt,
-    );
+      if (widget.expense != null) {
+        // Update existing expense
+        final updatedExpense = widget.expense!.copyWith(
+          amount: double.parse(_amountController.text),
+          category: _selectedCategory,
+          date: _selectedDate,
+          title: _titleController.text.isEmpty ? null : _titleController.text,
+          notes: _notesController.text.isEmpty ? null : _notesController.text,
+        );
 
-    setState(() {
-      _isLoading = false;
-    });
+        final result = await expenseService.update(updatedExpense);
 
+<<<<<<< Updated upstream
     Navigator.pop(context, expense);
+=======
+        if (!mounted) return;
+
+        if (result.isSuccess) {
+          Navigator.pop(context, updatedExpense);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result.errorMessage ?? 'Failed to update expense'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } else {
+        // Create new expense
+        final result = await expenseService.create(
+          amount: double.parse(_amountController.text),
+          category: _selectedCategory,
+          date: _selectedDate,
+          title: _titleController.text.isEmpty ? null : _titleController.text,
+          notes: _notesController.text.isEmpty ? null : _notesController.text,
+        );
+
+        if (!mounted) return;
+
+        if (result.isSuccess && result.data != null) {
+          Navigator.pop(context, result.data);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result.errorMessage ?? 'Failed to save expense'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+>>>>>>> Stashed changes
   }
 }

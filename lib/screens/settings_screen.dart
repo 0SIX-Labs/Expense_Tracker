@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
@@ -64,21 +65,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 40),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 40),
 
-          // Header
-          const Text(
-            'Settings',
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+            // Header
+            const Text(
+              'Settings',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
+<<<<<<< Updated upstream
           ),
           const SizedBox(height: 8),
           Text(
@@ -86,26 +91,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
             style: TextStyle(
               fontSize: 16,
               color: Colors.white.withOpacity(0.8),
+=======
+            const SizedBox(height: 8),
+            Text(
+              'Customize your experience',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white.withValues(alpha: 0.8),
+              ),
+>>>>>>> Stashed changes
             ),
-          ),
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // Profile Section
-          _buildProfileSection(),
-          const SizedBox(height: 16),
+            // Profile Section
+            _buildProfileSection(),
+            const SizedBox(height: 16),
 
+<<<<<<< Updated upstream
           // Category Management
           _buildCategoryManagement(),
           const SizedBox(height: 16),
+=======
+            // Category Management
+            _buildCategoryManagement(),
+            const SizedBox(height: 16),
 
-          // Currency Selection
-          _buildCurrencySelector(),
-          const SizedBox(height: 16),
+            // Currency Selection
+            _buildCurrencySelector(),
+            const SizedBox(height: 16),
+>>>>>>> Stashed changes
 
-          // Month Start Day
-          _buildMonthStartDaySelector(),
-          const SizedBox(height: 16),
+            // Month Start Day
+            _buildMonthStartDaySelector(),
+            const SizedBox(height: 16),
 
+            // Notifications Toggle
+            _buildNotificationsToggle(),
+            const SizedBox(height: 24),
+
+<<<<<<< Updated upstream
           // Dark Mode Toggle
           _buildDarkModeToggle(),
           const SizedBox(height: 16),
@@ -122,6 +146,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildAboutSection(),
           const SizedBox(height: 100),
         ],
+=======
+            // Export Data
+            _buildExportSection(),
+            const SizedBox(height: 100),
+          ],
+        ),
+>>>>>>> Stashed changes
       ),
     );
   }
@@ -623,6 +654,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+<<<<<<< Updated upstream
   Widget _buildAboutSection() {
     return GlassCard(
       padding: const EdgeInsets.all(20),
@@ -736,6 +768,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+=======
+  // Dialog background color constant for consistency
+  static const Color _dialogBg = Color(0xFF1E1E2E);
+  static const double _dialogOpacity = 0.88;
+>>>>>>> Stashed changes
 
   void _showEditProfileDialog() {
     final nameController = TextEditingController(text: _userName);
@@ -743,6 +780,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     showDialog(
       context: context,
+<<<<<<< Updated upstream
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           backgroundColor: const Color(0xFF2D2D3A),
@@ -762,13 +800,86 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.white.withOpacity(0.3),
+=======
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            backgroundColor: _dialogBg.withValues(alpha: _dialogOpacity),
+            title: const Text(
+              'Edit Profile',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: nameController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Your Name',
+                    labelStyle: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+>>>>>>> Stashed changes
                     ),
                   ),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Month Start Day',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const SizedBox(height: 8),
+                Slider(
+                  value: selectedMonthStartDay.toDouble(),
+                  min: 1,
+                  max: 31,
+                  divisions: 30,
+                  activeColor: Colors.white,
+                  inactiveColor: Colors.white.withValues(alpha: 0.3),
+                  onChanged: (value) {
+                    setDialogState(() {
+                      selectedMonthStartDay = value.round();
+                    });
+                  },
+                ),
+                Text(
+                  'Day $selectedMonthStartDay',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white70,
+                  backgroundColor: Colors.white.withValues(alpha: 0.08),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.15),
+                    ),
                   ),
                 ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
               ),
+<<<<<<< Updated upstream
               const SizedBox(height: 16),
               const Text(
                 'Month Start Day',
@@ -786,14 +897,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   setDialogState(() {
                     selectedMonthStartDay = value.round();
                   });
+=======
+              TextButton(
+                onPressed: () async {
+                  if (nameController.text.trim().isNotEmpty) {
+                    final result = await _userProfileService.createOrUpdate(
+                      name: nameController.text.trim(),
+                      monthStartDay: selectedMonthStartDay,
+                      defaultCurrency: _selectedCurrency,
+                    );
+
+                    if (!mounted) return;
+                    if (result.isSuccess) {
+                      setState(() {
+                        _userName = nameController.text.trim();
+                        _monthStartDay = selectedMonthStartDay;
+                      });
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Profile updated successfully'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            result.errorMessage ?? 'Failed to update profile',
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+>>>>>>> Stashed changes
                 },
-              ),
-              Text(
-                'Day $selectedMonthStartDay',
-                style: const TextStyle(color: Colors.white),
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color(0xFF8B5CF6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
               ),
             ],
           ),
+<<<<<<< Updated upstream
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -835,6 +993,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: const Text('Save'),
             ),
           ],
+=======
+>>>>>>> Stashed changes
         ),
       ),
     );
@@ -843,15 +1003,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showExportDialog(String format) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Export $format'),
-        content: Text('$format export feature coming soon!'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: AlertDialog(
+          backgroundColor: _dialogBg.withValues(alpha: _dialogOpacity),
+          title: Text(
+            'Export $format',
+            style: const TextStyle(color: Colors.white),
           ),
-        ],
+          content: Text(
+            '$format export feature coming soon!',
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: const Color(0xFF8B5CF6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'OK',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
